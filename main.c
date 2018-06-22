@@ -80,7 +80,7 @@ static int cmd_start_timer(int argc, char **argv) {
     thread_pid = thread_create(blink_stack, sizeof(blink_stack),
                             THREAD_PRIORITY_MAIN - 1, 0, timer_blink, NULL, "timer_blink");
     if (thread_pid == -EINVAL) {
-        printf("Invalid parameters");
+        (void) puts("Invalid parameters");
     } else if (thread_pid == -EOVERFLOW) {
         printf("Error creating timer thread");
     } else {
@@ -95,7 +95,7 @@ static int cmd_stop_timer(int argc, char **argv) {
     (void)argv;
 
     if (blink_pid == 0) {
-        printf("Timer not running");
+        puts("Timer not running");
         return 0;
     }
 
