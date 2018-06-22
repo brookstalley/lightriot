@@ -23,6 +23,7 @@ static char rcv_stack[THREAD_STACKSIZE_DEFAULT + THREAD_EXTRA_STACKSIZE_PRINTF];
 static msg_t rcv_queue[RCV_QUEUE_SIZE];
 
 #define BLINK_INTERVAL (1000UL * US_PER_MS)
+#define MSG_STOP_TIMER (0x0101)
 
 static int hello_world(int argc, char **argv) {
     /* Suppress compiler errors */
@@ -44,6 +45,8 @@ static int cmd_toggle_led(int argc, char **argv) {
     return 0;
 }
 
+
+
 void *timer_blink(void *arg) {
     bool timer_run = true;
     msg_t msg;
@@ -52,8 +55,8 @@ void *timer_blink(void *arg) {
     msg_init_queue(rcv_queue, RCV_QUEUE_SIZE);
 
     while(timer_run) {
-        if (msg_try_receive(&msg)) {
-            if (msg.content.value == 0) {
+        if (msg_try_receive(&msg) == 1) {
+            if (msg.content.value == MSG_STOP_TIMER) {
                 timer_run = false;
             }
         } else {
@@ -61,6 +64,7 @@ void *timer_blink(void *arg) {
             xtimer_usleep(BLINK_INTERVAL);
         }
     }
+    printf("Timer thread exiting");
     rcv_pid = 0;
     return NULL;
 }
@@ -68,10 +72,18 @@ void *timer_blink(void *arg) {
 static int cmd_start_timer(int argc, char **argv) {
     (void)argc;
     (void)argv;
-    rcv_pid = thread_create(rcv_stack, sizeof(rcv_stack),
-                            THREAD_PRIORITY_MAIN - 1, 0, timer_blink, NULL, "timer_blink");
+    kernel_pid_t thread_pid; 
 
-    printf("Timer started");
+    thread_pid = thread_create(rcv_stack, sizeof(rcv_stack),
+                            THREAD_PRIORITY_MAIN - 1, 0, timer_blink, NULL, "timer_blink");
+    if (thread_pid == -EINVAL) {
+        printf("Invalid parameters");
+    } else if (thread_pid == -EOVERFLOW) {
+        printf("Error creating timer thread");
+    } else {
+        rcv_pid = thread_pid;
+        printf("Timer started with pid %d", rcv_pid);
+    }
     return 0;
 }
 
@@ -86,14 +98,25 @@ static int cmd_stop_timer(int argc, char **argv) {
 
     msg_t msg;
 
-    msg.content.value=0;
+    msg.content.value=MSG_STOP_TIMER;
     if (msg_try_send(&msg, rcv_pid) == 0) {
         printf("Receiver queue full.\n");
     } else {
-        printf("Timer stopped");
+        printf("Timer stopping");
     }
     return 0;
 }
+
+#ifdef BTN0_PIN
+static void toggle_timer(void *unused) {
+    (void) unused;
+    if (rcv_pid !=0) {
+        cmd_start_timer(0, NULL);
+    } else {
+        cmd_stop_timer(0, NULL);
+    }
+}
+#endif
 
 const shell_command_t shell_commands[] = {
     {"hello", "prints hello world", hello_world},
@@ -112,10 +135,10 @@ int main(void)
 #endif
 
     rcv_pid = 0;
-    (void) puts("Welcome to RIOT!");
+    (void) puts("Started");
 
 #ifdef BTN0_PIN
-    gpio_init_int(BTN0_PIN, GPIO_IN_PU, GPIO_FALLING, toggle_led, NULL);
+    gpio_init_int(BTN0_PIN, GPIO_IN_PU, GPIO_FALLING, toggle_timer, NULL);
 #endif
 
     char line_buf[SHELL_DEFAULT_BUFSIZE];
