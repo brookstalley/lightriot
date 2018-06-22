@@ -17,8 +17,9 @@
 #include "net/gnrc.h"
 #endif
 
-static kernel_pid_t rcv_pid;
-static char rcv_stack[THREAD_STACKSIZE_DEFAULT + THREAD_EXTRA_STACKSIZE_PRINTF];
+static kernel_pid_t blink_pid;
+static char blink_stack[THREAD_STACKSIZE_DEFAULT + THREAD_EXTRA_STACKSIZE_PRINTF];
+
 #define RCV_QUEUE_SIZE (8U)
 static msg_t rcv_queue[RCV_QUEUE_SIZE];
 
@@ -33,19 +34,16 @@ static int hello_world(int argc, char **argv) {
     return 0;
 }
 
-static void toggle_led(void* unused) {
-    (void)unused;
+static void toggle_led(void) {
     LED0_TOGGLE;
 }
 
 static int cmd_toggle_led(int argc, char **argv) {
     (void)argc;
     (void)argv;
-    toggle_led(NULL);
+    toggle_led();
     return 0;
 }
-
-
 
 void *timer_blink(void *arg) {
     bool timer_run = true;
@@ -61,12 +59,12 @@ void *timer_blink(void *arg) {
             }
         } else {
             printf("blink");
-            toggle_led(NULL);
+            toggle_led();
             xtimer_usleep(BLINK_INTERVAL);
         }
     }
     printf("Timer thread exiting");
-    rcv_pid = 0;
+    blink_pid = 0;
     return NULL;
 }
 
@@ -75,19 +73,19 @@ static int cmd_start_timer(int argc, char **argv) {
     (void)argv;
     kernel_pid_t thread_pid; 
 
-    if (rcv_pid != 0) {
-        printf("Timer already running with pid %d", rcv_pid);
+    if (blink_pid != 0) {
+        printf("Timer already running with pid %d", blink_pid);
         return 0;
     }
-    thread_pid = thread_create(rcv_stack, sizeof(rcv_stack),
+    thread_pid = thread_create(blink_stack, sizeof(blink_stack),
                             THREAD_PRIORITY_MAIN - 1, 0, timer_blink, NULL, "timer_blink");
     if (thread_pid == -EINVAL) {
         printf("Invalid parameters");
     } else if (thread_pid == -EOVERFLOW) {
         printf("Error creating timer thread");
     } else {
-        rcv_pid = thread_pid;
-        printf("Timer started with pid %d", rcv_pid);
+        blink_pid = thread_pid;
+        printf("Timer started with pid %d", blink_pid);
     }
     return 0;
 }
@@ -96,7 +94,7 @@ static int cmd_stop_timer(int argc, char **argv) {
     (void)argc;
     (void)argv;
 
-    if (rcv_pid == 0) {
+    if (blink_pid == 0) {
         printf("Timer not running");
         return 0;
     }
@@ -104,7 +102,7 @@ static int cmd_stop_timer(int argc, char **argv) {
     msg_t msg;
 
     msg.content.value=MSG_STOP_TIMER;
-    if (msg_try_send(&msg, rcv_pid) == 0) {
+    if (msg_try_send(&msg, blink_pid) == 0) {
         printf("Receiver queue full.\n");
     } else {
         printf("Timer stopping");
@@ -115,7 +113,7 @@ static int cmd_stop_timer(int argc, char **argv) {
 #ifdef BTN0_PIN
 static void toggle_timer(void *unused) {
     (void) unused;
-    if (rcv_pid !=0) {
+    if (blink_pid !=0) {
         cmd_start_timer(0, NULL);
     } else {
         cmd_stop_timer(0, NULL);
@@ -139,7 +137,7 @@ int main(void)
     gnrc_netreg_register(GNRC_NETTYPE_UNDEF, &dump);
 #endif
 
-    rcv_pid = 0;
+    blink_pid = 0;
     (void) puts("Started");
 
 #ifdef BTN0_PIN
