@@ -1,5 +1,5 @@
 # name of your application
-APPLICATION = my_project
+APPLICATION = lightriot
 
 # If no BOARD is found in the environment, use this default:
 BOARD ?= native
