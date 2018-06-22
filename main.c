@@ -61,6 +61,7 @@ void *timer_blink(void *arg) {
             }
         } else {
             printf("blink");
+            toggle_led(NULL);
             xtimer_usleep(BLINK_INTERVAL);
         }
     }
@@ -74,6 +75,10 @@ static int cmd_start_timer(int argc, char **argv) {
     (void)argv;
     kernel_pid_t thread_pid; 
 
+    if (rcv_pid != 0) {
+        printf("Timer already running with pid %d", rcv_pid);
+        return 0;
+    }
     thread_pid = thread_create(rcv_stack, sizeof(rcv_stack),
                             THREAD_PRIORITY_MAIN - 1, 0, timer_blink, NULL, "timer_blink");
     if (thread_pid == -EINVAL) {
