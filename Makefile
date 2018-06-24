@@ -5,7 +5,7 @@ APPLICATION = lightriot
 BOARD ?= native
 
 # This has to be the absolute path to the RIOT base directory:
-RIOTBASE ?= $(CURDIR)/../RIOT
+RIOTBASE ?= /c/Users/brook/Source/RIOT
 
 # Uncomment these lines if you want to use platform support from external
 # repositories:

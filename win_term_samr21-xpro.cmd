@@ -1,0 +1,1 @@
+C:\\MinGW\\msys\\1.0\\bin\\mintty.exe /bin/bash -l -c "cd /c/Users/brook/Source/lightriot && make BOARD=samr21-xpro PORT=COM10 term"
