@@ -12,14 +12,20 @@
 #include "periph/gpio.h"
 #include "led.h"
 
-#ifdef MODULE_NETIF
 #include "net/gnrc/pktdump.h"
-#include "net/gnrc.h"
-#endif
+#include "net/ipv6/addr.h"
+#include "net/gnrc/pkt.h"
+#include "net/gnrc/pktbuf.h"
+#include "net/gnrc/netreg.h"
+#include "net/gnrc/netapi.h"
+#include "net/gnrc/netif.h"
+#include "net/gnrc/netif/hdr.h"
+#include "net/gnrc/pktdump.h"
 
 static kernel_pid_t blink_pid;
 static char blink_stack[THREAD_STACKSIZE_DEFAULT + THREAD_EXTRA_STACKSIZE_PRINTF];
 
+// Badly named, just used for messaging the LED blink thread
 #define RCV_QUEUE_SIZE (8U)
 static msg_t rcv_queue[RCV_QUEUE_SIZE];
 
@@ -28,6 +34,9 @@ static unsigned long blink_interval = BLINK_INTERVAL_DEFAULT;
 
 #define MSG_STOP_TIMER (0x0101)
 #define MSG_CHANGE_INTERVAL (0x0102)
+
+// Starting the network stuff
+#define NET_QUEUE_SIZE (16U)
 
 static int hello_world(int argc, char **argv) {
     /* Suppress compiler errors */
@@ -162,6 +171,47 @@ static void toggle_timer(void *unused) {
 }
 #endif
 
+void *_network_event_loop(void *arg)
+{
+    (void)arg;
+
+    static msg_t net_queue[NET_QUEUE_SIZE];
+    msg_init_queue(net_queue, NET_QUEUE_SIZE);
+
+    msg_t msg, reply;
+    reply.type = GNRC_NETAPI_MSG_TYPE_ACK;
+    reply.content.value = -ENOTSUP;
+
+    gnrc_netreg_entry_t me_reg = GNRC_NETREG_ENTRY_INIT_PID(
+                                     GNRC_NETREG_DEMUX_CTX_ALL,
+                                     sched_active_pid);
+
+    gnrc_netreg_register(GNRC_NETTYPE_SIXLOWPAN , &me_reg);
+
+    while (1) {
+        msg_receive(&msg);
+        gnrc_pktsnip_t *pkt = msg.content.ptr;
+
+        switch (msg.type) {
+            case GNRC_NETAPI_MSG_TYPE_RCV:
+                pkt = msg.content.ptr;
+               // _handle_incoming_pkt(pkt);
+                break;
+            case GNRC_NETAPI_MSG_TYPE_SND:
+                pkt = msg.content.ptr;
+               // _handle_outgoing_pkt(pkt);
+                break;
+             case GNRC_NETAPI_MSG_TYPE_SET:
+             case GNRC_NETAPI_MSG_TYPE_GET:
+                msg_reply(&msg, &reply);
+                break;
+            default:
+                break;
+        }
+    }
+    return NULL;
+}
+
 const shell_command_t shell_commands[] = {
     {"hello", "prints hello world", hello_world},
     {"toggle", "toggles on-board LED", cmd_toggle_led},
@@ -173,12 +223,6 @@ const shell_command_t shell_commands[] = {
 
 int main(void)
 {
-#ifdef MODULE_NETIF
-    gnrc_netreg_entry_t dump = GNRC_NETREG_ENTRY_INIT_PID(GNRC_NETREG_DEMUX_CTX_ALL,
-                                                          gnrc_pktdump_pid);
-    gnrc_netreg_register(GNRC_NETTYPE_UNDEF, &dump);
-#endif
-
     blink_pid = 0;
     (void) puts("Started\n");
 

@@ -48,11 +48,15 @@ ifneq (,$(filter $(BOARD),$(BOARD_PROVIDES_NETIF)))
   USEMODULE += gnrc_netdev_default
   # automatically initialize the network interface
   USEMODULE += auto_init_gnrc_netif
+  # sixlowpan
+  USEMODULE += gnrc_sixlowpan_default
+  # UDP
+  USEMODULE += gnrc_udp
   # shell command to send L2 packets with a simple string
   USEMODULE += gnrc_txtsnd
   # the application dumps received packets to stdout
   USEMODULE += gnrc_pktdump
-
+ 
   # We use only the lower layers of the GNRC network stack, hence, we can
   # reduce the size of the packet buffer a bit
   CFLAGS += -DGNRC_PKTBUF_SIZE=512
