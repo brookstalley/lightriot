@@ -112,10 +112,13 @@ static int cmd_stop_timer(int argc, char **argv) {
 
 #ifdef BTN0_PIN
 static void toggle_timer(void *unused) {
+    puts("Button pressed, toggling timer");
     (void) unused;
-    if (blink_pid !=0) {
+    if (blink_pid ==0) {
+        puts("Starting timer");
         cmd_start_timer(0, NULL);
     } else {
+        puts("Stopping timer");
         cmd_stop_timer(0, NULL);
     }
 }
