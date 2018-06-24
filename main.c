@@ -23,8 +23,11 @@ static char blink_stack[THREAD_STACKSIZE_DEFAULT + THREAD_EXTRA_STACKSIZE_PRINTF
 #define RCV_QUEUE_SIZE (8U)
 static msg_t rcv_queue[RCV_QUEUE_SIZE];
 
-#define BLINK_INTERVAL (1000UL * US_PER_MS)
+#define BLINK_INTERVAL_DEFAULT (1000UL * US_PER_MS)
+static unsigned long blink_interval = BLINK_INTERVAL_DEFAULT;
+
 #define MSG_STOP_TIMER (0x0101)
+#define MSG_CHANGE_INTERVAL (0x0102)
 
 static int hello_world(int argc, char **argv) {
     /* Suppress compiler errors */
@@ -56,11 +59,14 @@ void *timer_blink(void *arg) {
         if (msg_try_receive(&msg) == 1) {
             if (msg.content.value == MSG_STOP_TIMER) {
                 timer_run = false;
+            } else if (msg.content.value == MSG_CHANGE_INTERVAL) {
+                // Nothing for now because we'll automatically pick it up
+                puts("Timer interval changed\n");
             }
         } else {
             puts("blink\n");
             toggle_led();
-            xtimer_usleep(BLINK_INTERVAL);
+            xtimer_usleep(blink_interval);
         }
     }
     printf("Timer thread exiting");
@@ -110,6 +116,38 @@ static int cmd_stop_timer(int argc, char **argv) {
     return 0;
 }
 
+static int cmd_change_interval(int argc, char **argv) {
+    (void)argc;
+    (void)argv;
+
+    unsigned long new_interval = 0;
+
+    if (blink_pid == 0) {
+        puts("Timer not running");
+        return 1;
+    }
+    if (argc < 1) {
+        printf("usage: %s <ms>\n", argv[0]);
+        return 1;
+    }
+    new_interval = atoi(argv[1]);
+    if (new_interval <=0) {
+        puts("Must specify a positive integer for milliseconds");
+        return 1;
+    }
+    blink_interval = new_interval * US_PER_MS;
+
+    msg_t msg;
+
+    msg.content.value=MSG_CHANGE_INTERVAL;
+    if (msg_try_send(&msg, blink_pid) == 0) {
+        puts("Receiver queue full.\n");
+    } else {
+        puts("Timer updated\n");
+    }
+    return 0;
+}
+
 #ifdef BTN0_PIN
 static void toggle_timer(void *unused) {
     puts("Button pressed, toggling timer\n");
@@ -129,6 +167,7 @@ const shell_command_t shell_commands[] = {
     {"toggle", "toggles on-board LED", cmd_toggle_led},
     {"start_timer", "starts periodic blinking", cmd_start_timer},
     {"stop_timer", "stops periodic blinking", cmd_stop_timer},
+    {"change_interval", "change blink frequency", cmd_change_interval },
     { NULL, NULL, NULL }
 };
 
