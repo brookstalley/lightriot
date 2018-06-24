@@ -58,7 +58,7 @@ void *timer_blink(void *arg) {
                 timer_run = false;
             }
         } else {
-            printf("blink");
+            puts("blink\n");
             toggle_led();
             xtimer_usleep(BLINK_INTERVAL);
         }
@@ -80,12 +80,12 @@ static int cmd_start_timer(int argc, char **argv) {
     thread_pid = thread_create(blink_stack, sizeof(blink_stack),
                             THREAD_PRIORITY_MAIN - 1, 0, timer_blink, NULL, "timer_blink");
     if (thread_pid == -EINVAL) {
-        (void) puts("Invalid parameters");
+        (void) puts("Invalid parameters\n");
     } else if (thread_pid == -EOVERFLOW) {
-        printf("Error creating timer thread");
+        puts("Error creating timer thread\n");
     } else {
         blink_pid = thread_pid;
-        printf("Timer started with pid %d", blink_pid);
+        printf("Timer started with pid %d\n", blink_pid);
     }
     return 0;
 }
@@ -103,22 +103,22 @@ static int cmd_stop_timer(int argc, char **argv) {
 
     msg.content.value=MSG_STOP_TIMER;
     if (msg_try_send(&msg, blink_pid) == 0) {
-        printf("Receiver queue full.\n");
+        puts("Receiver queue full.\n");
     } else {
-        printf("Timer stopping");
+        puts("Timer stopping\n");
     }
     return 0;
 }
 
 #ifdef BTN0_PIN
 static void toggle_timer(void *unused) {
-    puts("Button pressed, toggling timer");
+    puts("Button pressed, toggling timer\n");
     (void) unused;
     if (blink_pid ==0) {
-        puts("Starting timer");
+        puts("Starting timer\n");
         cmd_start_timer(0, NULL);
     } else {
-        puts("Stopping timer");
+        puts("Stopping timer\n");
         cmd_stop_timer(0, NULL);
     }
 }
@@ -141,7 +141,7 @@ int main(void)
 #endif
 
     blink_pid = 0;
-    (void) puts("Started");
+    (void) puts("Started\n");
 
 #ifdef BTN0_PIN
     gpio_init_int(BTN0_PIN, GPIO_IN_PU, GPIO_FALLING, toggle_timer, NULL);
