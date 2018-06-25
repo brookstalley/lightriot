@@ -7,6 +7,8 @@ BOARD ?= native
 # This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= /c/Users/brook/Source/RIOT
 
+$(info $$RIOTBASE is [${RIOTBASE}]) 
+
 # Uncomment these lines if you want to use platform support from external
 # repositories:
 #RIOTCPU ?= $(CURDIR)/../../RIOT/thirdparty_cpu
