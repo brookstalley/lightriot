@@ -26,8 +26,8 @@ static kernel_pid_t blink_pid;
 static char blink_stack[THREAD_STACKSIZE_DEFAULT + THREAD_EXTRA_STACKSIZE_PRINTF];
 
 // Badly named, just used for messaging the LED blink thread
-#define RCV_QUEUE_SIZE (8U)
-static msg_t rcv_queue[RCV_QUEUE_SIZE];
+#define MAIN_QUEUE_SIZE (16U)
+static msg_t _main_msg_queue[MAIN_QUEUE_SIZE];
 
 #define BLINK_INTERVAL_DEFAULT (1000UL * US_PER_MS)
 static unsigned long blink_interval = BLINK_INTERVAL_DEFAULT;
@@ -62,7 +62,6 @@ void *timer_blink(void *arg) {
     msg_t msg;
 
     (void)arg;
-    msg_init_queue(rcv_queue, RCV_QUEUE_SIZE);
 
     while(timer_run) {
         if (msg_try_receive(&msg) == 1) {
@@ -171,6 +170,7 @@ static void toggle_timer(void *unused) {
 }
 #endif
 
+/*
 void *_network_event_loop(void *arg)
 {
     (void)arg;
@@ -211,6 +211,11 @@ void *_network_event_loop(void *arg)
     }
     return NULL;
 }
+*/
+
+
+extern int udp_cmd(int argc, char **argv);
+extern int mac_cmd(int argc, char **argv);
 
 const shell_command_t shell_commands[] = {
     {"hello", "prints hello world", hello_world},
@@ -218,11 +223,15 @@ const shell_command_t shell_commands[] = {
     {"start_timer", "starts periodic blinking", cmd_start_timer},
     {"stop_timer", "stops periodic blinking", cmd_stop_timer},
     {"change_interval", "change blink frequency", cmd_change_interval },
+    {"udp", "send data over UDP and listen on UDP ports", udp_cmd },
+    {"mac", "get MAC protocol's internal information", mac_cmd },
     { NULL, NULL, NULL }
 };
 
 int main(void)
 {
+    msg_init_queue(_main_msg_queue, MAIN_QUEUE_SIZE);
+
     blink_pid = 0;
     (void) puts("Started\n");
 
