@@ -10,6 +10,7 @@
 
 #include "board.h"
 #include "periph/gpio.h"
+#include "periph/cpuid.h"
 #include "led.h"
 
 #include "net/gnrc/pktdump.h"
@@ -25,7 +26,6 @@
 static kernel_pid_t blink_pid;
 static char blink_stack[THREAD_STACKSIZE_DEFAULT + THREAD_EXTRA_STACKSIZE_PRINTF];
 
-// Badly named, just used for messaging the LED blink thread
 #define MAIN_QUEUE_SIZE (16U)
 static msg_t _main_msg_queue[MAIN_QUEUE_SIZE];
 
@@ -35,8 +35,7 @@ static unsigned long blink_interval = BLINK_INTERVAL_DEFAULT;
 #define MSG_STOP_TIMER (0x0101)
 #define MSG_CHANGE_INTERVAL (0x0102)
 
-// Starting the network stuff
-#define NET_QUEUE_SIZE (16U)
+uint8_t cpuid[CPUID_LEN];
 
 static int hello_world(int argc, char **argv) {
     /* Suppress compiler errors */
@@ -170,6 +169,21 @@ static void toggle_timer(void *unused) {
 }
 #endif
 
+static void get_board_id(void) {
+    cpuid_get(cpuid);
+    for (unsigned int i = 0; i < CPUID_LEN; i++) {
+        printf("%d:",cpuid[i]);
+        puts("\n");
+    }
+}
+
+static int cmd_info(int argc, char **argv) {
+    (void)argc;
+    (void)argv;
+
+    get_board_id();
+    return 0;
+}
 /*
 void *_network_event_loop(void *arg)
 {
@@ -225,6 +239,7 @@ const shell_command_t shell_commands[] = {
     {"change_interval", "change blink frequency", cmd_change_interval },
     {"udp", "send data over UDP and listen on UDP ports", udp_cmd },
     {"mac", "get MAC protocol's internal information", mac_cmd },
+    {"info", "get system info", cmd_info },
     { NULL, NULL, NULL }
 };
 
