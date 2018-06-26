@@ -171,10 +171,11 @@ static void toggle_timer(void *unused) {
 
 static void get_board_id(void) {
     cpuid_get(cpuid);
+    puts("Board ID:");
     for (unsigned int i = 0; i < CPUID_LEN; i++) {
-        printf("%d:",cpuid[i]);
-        puts("\n");
+        printf("%02x",cpuid[i]);
     }
+    puts("\n");
 }
 
 static int cmd_info(int argc, char **argv) {
