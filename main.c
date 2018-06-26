@@ -169,13 +169,23 @@ static void toggle_timer(void *unused) {
 }
 #endif
 
+unsigned short crc16(const unsigned char* data_p, unsigned char length){
+    unsigned char x;
+    unsigned short crc = 0xFFFF;
+
+    while (length--){
+        x = crc >> 8 ^ *data_p++;
+        x ^= x>>4;
+        crc = (crc << 8) ^ ((unsigned short)(x << 12)) ^ ((unsigned short)(x <<5)) ^ ((unsigned short)x);
+    }
+    return crc;
+}
+
+
 static void get_board_id(void) {
     cpuid_get(cpuid);
-    puts("Board ID:");
-    for (unsigned int i = 0; i < CPUID_LEN; i++) {
-        printf("%02x",cpuid[i]);
-    }
-    puts("\n");
+    unsigned short boardid = crc16(cpuid, CPUID_LEN);
+    printf("Board ID: %04x\n",boardid);
 }
 
 static int cmd_info(int argc, char **argv) {
