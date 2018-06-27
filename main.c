@@ -26,7 +26,7 @@
 static kernel_pid_t blink_pid;
 static char blink_stack[THREAD_STACKSIZE_DEFAULT + THREAD_EXTRA_STACKSIZE_PRINTF];
 
-#define MAIN_QUEUE_SIZE (16U)
+#define MAIN_QUEUE_SIZE (64U)
 static msg_t _main_msg_queue[MAIN_QUEUE_SIZE];
 
 #define BLINK_INTERVAL_DEFAULT (1000UL * US_PER_MS)
