@@ -29,6 +29,9 @@ static char blink_stack[THREAD_STACKSIZE_DEFAULT + THREAD_EXTRA_STACKSIZE_PRINTF
 #define MAIN_QUEUE_SIZE (64U)
 static msg_t _main_msg_queue[MAIN_QUEUE_SIZE];
 
+#define LIGHT_QUEUE_SIZE (8U)
+static msg_t light_msg_queue[LIGHT_QUEUE_SIZE];
+
 #define BLINK_INTERVAL_DEFAULT (1000UL * US_PER_MS)
 static unsigned long blink_interval = BLINK_INTERVAL_DEFAULT;
 
@@ -61,7 +64,7 @@ void *timer_blink(void *arg) {
     msg_t msg;
 
     (void)arg;
-
+    msg_init_queue(light_msg_queue, LIGHT_QUEUE_SIZE);
     while(timer_run) {
         if (msg_try_receive(&msg) == 1) {
             if (msg.content.value == MSG_STOP_TIMER) {
@@ -116,7 +119,8 @@ static int cmd_stop_timer(int argc, char **argv) {
 
     msg.content.value=MSG_STOP_TIMER;
     if (msg_try_send(&msg, blink_pid) == 0) {
-        puts("Receiver queue full.\n");
+        puts("Receiver queue full. Queue:\n");
+        msg_queue_print();
     } else {
         puts("Timer stopping\n");
     }
