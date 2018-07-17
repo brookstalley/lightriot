@@ -111,27 +111,27 @@ extern "C" {
  * @{
  */
 static const uart_conf_t uart_config[] = {
-    {    /* Virtual COM Port */
+    {    /* Virtual COM Port -- mapping to USB for now? */
         .dev      = &SERCOM3->USART,
-        .rx_pin   = GPIO_PIN(PA,23),
-        .tx_pin   = GPIO_PIN(PA,22),
+        .rx_pin   = GPIO_PIN(PA,34),
+        .tx_pin   = GPIO_PIN(PA,33),
         .mux      = GPIO_MUX_C,
         .rx_pad   = UART_PAD_RX_1,
         .tx_pad   = UART_PAD_TX_0,
         .flags    = UART_FLAG_NONE,
         .gclk_src = GCLK_CLKCTRL_GEN_GCLK0
     },
-    {    /* EXT1 */
+    {    /* EXT1 -- mapping to UART that talks to TPS92661 */
         .dev    = &SERCOM4->USART,
-        .rx_pin = GPIO_PIN(PB,9),
-        .tx_pin = GPIO_PIN(PB,8),
+        .rx_pin = GPIO_PIN(PA,28),
+        .tx_pin = GPIO_PIN(PA,27),
         .mux    = GPIO_MUX_D,
         .rx_pad = UART_PAD_RX_1,
         .tx_pad = UART_PAD_TX_0,
         .flags  = UART_FLAG_NONE,
         .gclk_src = GCLK_CLKCTRL_GEN_GCLK0
-    },
-    {    /* EXT2/3 */
+    } /*
+    {    \* EXT2/3 *\
         .dev    = &SERCOM4->USART,
         .rx_pin = GPIO_PIN(PB,11),
         .tx_pin = GPIO_PIN(PB,10),
@@ -140,7 +140,7 @@ static const uart_conf_t uart_config[] = {
         .tx_pad = UART_PAD_TX_2,
         .flags  = UART_FLAG_NONE,
         .gclk_src = GCLK_CLKCTRL_GEN_GCLK0
-    }
+    } */
 };
 
 /* interrupt function name mapping */

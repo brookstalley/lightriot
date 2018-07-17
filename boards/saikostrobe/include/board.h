@@ -45,7 +45,10 @@ extern "C" {
  * @name   LED pin definitions and handlers
  * @{
  */
-#define LED0_PIN            GPIO_PIN(PB, 30)
+#define LED0_PIN            GPIO_PIN(PA, 18)
+#define LED1_PIN            GPIO_PIN(PA, 17)
+#define LED2_PIN            GPIO_PIN(PA, 19)
+
 
 #define LED_PORT            PORT->Group[PB]
 #define LED0_MASK           (1 << 30)
