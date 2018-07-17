@@ -120,8 +120,8 @@ static const uart_conf_t uart_config[] = {
         .tx_pad   = UART_PAD_TX_0,
         .flags    = UART_FLAG_NONE,
         .gclk_src = GCLK_CLKCTRL_GEN_GCLK0
-    },
-    {    /* EXT1 -- mapping to UART that talks to TPS92661 */
+    } /*,
+    {    // EXT1 -- mapping to UART that talks to TPS92661 
         .dev    = &SERCOM4->USART,
         .rx_pin = GPIO_PIN(PA,28),
         .tx_pin = GPIO_PIN(PA,27),
@@ -130,8 +130,8 @@ static const uart_conf_t uart_config[] = {
         .tx_pad = UART_PAD_TX_0,
         .flags  = UART_FLAG_NONE,
         .gclk_src = GCLK_CLKCTRL_GEN_GCLK0
-    } /*
-    {    \* EXT2/3 *\
+    }, */ /*
+    {    // EXT2/3 
         .dev    = &SERCOM4->USART,
         .rx_pin = GPIO_PIN(PB,11),
         .tx_pin = GPIO_PIN(PB,10),
@@ -165,40 +165,43 @@ static const uart_conf_t uart_config[] = {
 #define PWM_2_CHANNELS      PWM_MAX_CHANNELS
 
 /* PWM device configuration */
+/*
 static const pwm_conf_t pwm_config[] = {
 #if PWM_0_EN
     {TCC2, {
-        /* GPIO pin, MUX value, TCC channel */
+        // GPIO pin, MUX value, TCC channel
         { GPIO_PIN(PA, 12), GPIO_MUX_E, 0 },
         { GPIO_PIN(PA, 13), GPIO_MUX_E, 1 },
     }},
 #endif
 #if PWM_1_EN
     {TC4, {
-        /* GPIO pin, MUX value, TCC channel */
+        // GPIO pin, MUX value, TCC channel 
         { GPIO_PIN(PB, 12), GPIO_MUX_E, 0 },
         { GPIO_PIN(PB, 13), GPIO_MUX_E, 1 },
     }}
 #endif
 #if PWM_2_EN
     {TC6, {
-        /* GPIO pin, MUX value, TCC channel */
+        // GPIO pin, MUX value, TCC channel
         { GPIO_PIN(PB, 02), GPIO_MUX_E, 0 },
         { GPIO_PIN(PB, 03), GPIO_MUX_E, 1 },
     }}
 #endif
 };
+*/
 
 /* number of devices that are actually defined */
-#define PWM_NUMOF           (3U)
+//#define PWM_NUMOF           (3U)
 /** @} */
 
 /**
  * @name SPI configuration
  * @{
  */
+ /*
 static const spi_conf_t spi_config[] = {
-    {   /* EXT1 */
+    {   // EXT1 
         .dev      = &SERCOM0->SPI,
         .miso_pin = GPIO_PIN(PA, 4),
         .mosi_pin = GPIO_PIN(PA, 6),
@@ -209,7 +212,7 @@ static const spi_conf_t spi_config[] = {
         .miso_pad = SPI_PAD_MISO_0,
         .mosi_pad = SPI_PAD_MOSI_2_SCK_3
     },
-    {   /* EXT2 */
+    {   // EXT2 
         .dev      = &SERCOM1->SPI,
         .miso_pin = GPIO_PIN(PA, 16),
         .mosi_pin = GPIO_PIN(PA, 18),
@@ -220,7 +223,7 @@ static const spi_conf_t spi_config[] = {
         .miso_pad = SPI_PAD_MISO_0,
         .mosi_pad = SPI_PAD_MOSI_2_SCK_3
     },
-    {   /* EXT3 */
+    {   // EXT3 
         .dev      = &SERCOM5->SPI,
         .miso_pin = GPIO_PIN(PB, 16),
         .mosi_pin = GPIO_PIN(PB, 22),
@@ -232,8 +235,9 @@ static const spi_conf_t spi_config[] = {
         .mosi_pad = SPI_PAD_MOSI_2_SCK_3
     }
 };
+*/
 
-#define SPI_NUMOF           (sizeof(spi_config) / sizeof(spi_config[0]))
+//#define SPI_NUMOF           (sizeof(spi_config) / sizeof(spi_config[0]))
 /** @} */
 
 /**

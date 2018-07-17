@@ -49,13 +49,24 @@ extern "C" {
 #define LED1_PIN            GPIO_PIN(PA, 17)
 #define LED2_PIN            GPIO_PIN(PA, 19)
 
-// I don't understand this, so not changing it.But I think PB is wrong.
-#define LED_PORT            PORT->Group[PB]
-#define LED0_MASK           (1 << 30)
+#define LED_PORT            PORT->Group[PA]
+#define LED0_MASK           (1 << 18)
+#define LED1_MASK           (1 << 17)
+#define LED2_MASK           (1 << 19)
 
 #define LED0_ON             (LED_PORT.OUTCLR.reg = LED0_MASK)
 #define LED0_OFF            (LED_PORT.OUTSET.reg = LED0_MASK)
 #define LED0_TOGGLE         (LED_PORT.OUTTGL.reg = LED0_MASK)
+
+#define LED1_ON             (LED_PORT.OUTCLR.reg = LED1_MASK)
+#define LED1_OFF            (LED_PORT.OUTSET.reg = LED1_MASK)
+#define LED1_TOGGLE         (LED_PORT.OUTTGL.reg = LED1_MASK)
+
+#define LED2_ON             (LED_PORT.OUTCLR.reg = LED2_MASK)
+#define LED2_OFF            (LED_PORT.OUTSET.reg = LED2_MASK)
+#define LED2_TOGGLE         (LED_PORT.OUTTGL.reg = LED2_MASK)
+
+
 /** @} */
 
 /**
@@ -66,7 +77,7 @@ extern "C" {
 #define BTN0_PORT           PORT->Group[PA]
 #define BTN0_PIN            GPIO_PIN(PA, 7)
 #define BTN0_MODE           GPIO_IN_PU
-*/
+
 /** @} */
 
 /**
