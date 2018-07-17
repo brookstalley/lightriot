@@ -49,7 +49,7 @@ extern "C" {
 #define LED1_PIN            GPIO_PIN(PA, 17)
 #define LED2_PIN            GPIO_PIN(PA, 19)
 
-
+// I don't understand this, so not changing it.But I think PB is wrong.
 #define LED_PORT            PORT->Group[PB]
 #define LED0_MASK           (1 << 30)
 
@@ -62,9 +62,11 @@ extern "C" {
  * @name SW0 (Button) pin definitions
  * @{
  */
+ // Updated for encoder switch
 #define BTN0_PORT           PORT->Group[PA]
-#define BTN0_PIN            GPIO_PIN(PA, 15)
+#define BTN0_PIN            GPIO_PIN(PA, 7)
 #define BTN0_MODE           GPIO_IN_PU
+*/
 /** @} */
 
 /**

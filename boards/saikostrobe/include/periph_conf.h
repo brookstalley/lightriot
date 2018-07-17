@@ -156,8 +156,8 @@ static const uart_conf_t uart_config[] = {
  * @{
  */
 #define PWM_0_EN            1
-#define PWM_1_EN            0
-#define PWM_2_EN            0
+#define PWM_1_EN            1
+#define PWM_2_EN            1
 #define PWM_MAX_CHANNELS    2
 /* for compatibility with test application */
 #define PWM_0_CHANNELS      PWM_MAX_CHANNELS
