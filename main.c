@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
+#include <errno.h>
+#include <stdlib.h>
 
 #include "thread.h"
 #include "shell.h"
@@ -13,6 +15,7 @@
 #include "periph/cpuid.h"
 #include "led.h"
 
+/* Removing while we get the simple stuff up and running
 #include "net/gnrc/pktdump.h"
 #include "net/ipv6/addr.h"
 #include "net/gnrc/pkt.h"
@@ -22,6 +25,7 @@
 #include "net/gnrc/netif.h"
 #include "net/gnrc/netif/hdr.h"
 #include "net/gnrc/pktdump.h"
+*/
 
 static kernel_pid_t blink_pid;
 static char blink_stack[THREAD_STACKSIZE_DEFAULT + THREAD_EXTRA_STACKSIZE_PRINTF];
@@ -252,8 +256,10 @@ const shell_command_t shell_commands[] = {
     {"start_timer", "starts periodic blinking", cmd_start_timer},
     {"stop_timer", "stops periodic blinking", cmd_stop_timer},
     {"change_interval", "change blink frequency", cmd_change_interval },
+    /*
     {"udp", "send data over UDP and listen on UDP ports", udp_cmd },
     {"mac", "get MAC protocol's internal information", mac_cmd },
+    */
     {"info", "get system info", cmd_info },
     { NULL, NULL, NULL }
 };
