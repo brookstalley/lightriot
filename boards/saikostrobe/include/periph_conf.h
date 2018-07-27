@@ -199,19 +199,19 @@ static const pwm_conf_t pwm_config[] = {
  * @name SPI configuration
  * @{
  */
- /*
 static const spi_conf_t spi_config[] = {
     {   // EXT1 
         .dev      = &SERCOM0->SPI,
-        .miso_pin = GPIO_PIN(PA, 4),
-        .mosi_pin = GPIO_PIN(PA, 6),
-        .clk_pin  = GPIO_PIN(PA, 7),
-        .miso_mux = GPIO_MUX_D,
-        .mosi_mux = GPIO_MUX_D,
-        .clk_mux  = GPIO_MUX_D,
-        .miso_pad = SPI_PAD_MISO_0,
-        .mosi_pad = SPI_PAD_MOSI_2_SCK_3
-    },
+        .miso_pin = GPIO_PIN(PA, 15),
+        .mosi_pin = GPIO_PIN(PA, 12),
+        .clk_pin  = GPIO_PIN(PA, 13),
+        .miso_mux = GPIO_MUX_D, // No idea what to put here
+        .mosi_mux = GPIO_MUX_D, // No idea what to put here
+        .clk_mux  = GPIO_MUX_D, // No idea what to put here
+        .miso_pad = SPI_PAD_MISO_0, // No idea what to put here
+        .mosi_pad = SPI_PAD_MOSI_2_SCK_3 // No idea what to put here
+    }
+    /*,
     {   // EXT2 
         .dev      = &SERCOM1->SPI,
         .miso_pin = GPIO_PIN(PA, 16),
@@ -234,8 +234,15 @@ static const spi_conf_t spi_config[] = {
         .miso_pad = SPI_PAD_MISO_0,
         .mosi_pad = SPI_PAD_MOSI_2_SCK_3
     }
+    */
 };
-*/
+
+/**
+ * @name SPI confguration
+ **/
+#define SPI_CS_DAC = GPIO_PIN(PA, 22)
+#define SPI_CS_MEM = GPIO_PIN(PA, 4)
+
 
 //#define SPI_NUMOF           (sizeof(spi_config) / sizeof(spi_config[0]))
 /** @} */

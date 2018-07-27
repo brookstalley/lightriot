@@ -42,6 +42,9 @@ extern "C" {
 /** @} */
 
 /**
+ * @name 
+
+/**
  * @name   LED pin definitions and handlers
  * @{
  */
@@ -77,6 +80,15 @@ extern "C" {
 #define BTN0_PORT           PORT->Group[PA]
 #define BTN0_PIN            GPIO_PIN(PA, 7)
 #define BTN0_MODE           GPIO_IN_PU
+
+#define ENCA_PORT           PORT->Group[PA]
+#define ENCA_PIN            GPIO_PIN(PA, 14)
+#define ENCA_MODE           GPIO_IN_PU // Not sure if this should be pull-up
+
+#define ENCB_PORT           PORT->Group[PA]
+#define ENCB_PIN            GPIO_PIN(PB, 23)
+#define ENCB_MODE           GPIO_IN_PU // Not sure if this should be pull-up
+
 
 /** @} */
 
