@@ -111,17 +111,17 @@ extern "C" {
  * @{
  */
 static const uart_conf_t uart_config[] = {
-    {    /* Virtual COM Port -- mapping to USB for now? */
+    {    // EXT1 -- mapping to UART that talks to TPS92661 
         .dev      = &SERCOM3->USART,
-        .rx_pin   = GPIO_PIN(PA,34),
-        .tx_pin   = GPIO_PIN(PA,33),
-        .mux      = GPIO_MUX_C,
+        .rx_pin   = GPIO_PIN(PA,28),
+        .tx_pin   = GPIO_PIN(PA,27),
+        .mux      = GPIO_MUX_F,
         .rx_pad   = UART_PAD_RX_1,
         .tx_pad   = UART_PAD_TX_0,
         .flags    = UART_FLAG_NONE,
         .gclk_src = GCLK_CLKCTRL_GEN_GCLK0
-    } /*,
-    {    // EXT1 -- mapping to UART that talks to TPS92661 
+    } /* Don't think USB actually goes here
+    {    // EXT2 -- mapping to USB
         .dev    = &SERCOM4->USART,
         .rx_pin = GPIO_PIN(PA,28),
         .tx_pin = GPIO_PIN(PA,27),
@@ -130,7 +130,7 @@ static const uart_conf_t uart_config[] = {
         .tx_pad = UART_PAD_TX_0,
         .flags  = UART_FLAG_NONE,
         .gclk_src = GCLK_CLKCTRL_GEN_GCLK0
-    }, */ /*
+    } 
     {    // EXT2/3 
         .dev    = &SERCOM4->USART,
         .rx_pin = GPIO_PIN(PB,11),
@@ -199,17 +199,19 @@ static const pwm_conf_t pwm_config[] = {
  * @name SPI configuration
  * @{
  */
+// From table 5-1 in https://www.mouser.com/ds/2/268/Atmel-42223-SAM-R21_Datasheet-1065540.pdf
 static const spi_conf_t spi_config[] = {
     {   // EXT1 
-        .dev      = &SERCOM0->SPI,
+        // 
+        .dev      = &SERCOM2->SPI,
         .miso_pin = GPIO_PIN(PA, 15),
         .mosi_pin = GPIO_PIN(PA, 12),
         .clk_pin  = GPIO_PIN(PA, 13),
-        .miso_mux = GPIO_MUX_D, // No idea what to put here
-        .mosi_mux = GPIO_MUX_D, // No idea what to put here
-        .clk_mux  = GPIO_MUX_D, // No idea what to put here
-        .miso_pad = SPI_PAD_MISO_0, // No idea what to put here
-        .mosi_pad = SPI_PAD_MOSI_2_SCK_3 // No idea what to put here
+        .miso_mux = GPIO_MUX_C, 
+        .mosi_mux = GPIO_MUX_C, 
+        .clk_mux  = GPIO_MUX_C, 
+        .miso_pad = SPI_PAD_MISO_2, 
+        .mosi_pad = SPI_PAD_MOSI_0_SCK_1 
     }
     /*,
     {   // EXT2 
