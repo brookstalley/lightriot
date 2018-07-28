@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2017 Travis Griggs <travisgriggs@gmail.com>
- * Copyright (C) 2017 Dan Evans <photonthunder@gmail.com>
+ * Copyright (C) 2014-2015 Freie Universität Berlin
  *
  * This file is subject to the terms and conditions of the GNU Lesser
  * General Public License v2.1. See the file LICENSE in the top level
@@ -8,15 +7,16 @@
  */
 
 /**
- * @ingroup     boards_samd21-xpro
+ * @ingroup     boards_samr21-xpro
  * @{
  *
  * @file
- * @brief       Configuration of CPU peripherals for the Atmel SAM D21 Xplained
+ * @brief       Configuration of CPU peripherals for the Atmel SAM R21 Xplained
  *              Pro board
  *
- * @author      Travis Griggs <travisgriggs@gmail.com>
- * @author      Dan Evans <photonthunder@gmail.com>
+ * @author      Thomas Eichinger <thomas.eichinger@fu-berlin.de>
+ * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
+ * @author      Peter Kietzmann <peter.kietzmann@haw-hamburg.de>
  */
 
 #ifndef PERIPH_CONF_H
@@ -72,7 +72,7 @@ extern "C" {
 /* generate the actual used core clock frequency */
 #define CLOCK_CORECLOCK     (((CLOCK_PLL_MUL + 1) * 1000000U) / CLOCK_PLL_DIV)
 #elif CLOCK_USE_XOSC32_DFLL
-/* Settings for 32 kHz external oscillator and 48 MHz DFLL */
+    /* Settings for 32 kHz external oscillator and 48 MHz DFLL */
 #define CLOCK_CORECLOCK     (48000000U)
 #define CLOCK_XOSC32K       (32768UL)
 #define CLOCK_8MHZ          (1)
@@ -86,7 +86,7 @@ extern "C" {
 /** @} */
 
 /**
- * @name Timer peripheral configuration
+ * @name    Timer peripheral configuration
  * @{
  */
 #define TIMER_NUMOF         (2U)
@@ -107,153 +107,110 @@ extern "C" {
 /** @} */
 
 /**
- * @name UART configuration
+ * @name    UART configuration
  * @{
  */
 static const uart_conf_t uart_config[] = {
-    {    // EXT1 -- mapping to UART that talks to TPS92661 
-        .dev      = &SERCOM3->USART,
-        .rx_pin   = GPIO_PIN(PA,28),
-        .tx_pin   = GPIO_PIN(PA,27),
-        .mux      = GPIO_MUX_F,
-        .rx_pad   = UART_PAD_RX_1,
-        .tx_pad   = UART_PAD_TX_0,
-        .flags    = UART_FLAG_NONE,
-        .gclk_src = GCLK_CLKCTRL_GEN_GCLK0
-    } /* Don't think USB actually goes here
-    {    // EXT2 -- mapping to USB
-        .dev    = &SERCOM4->USART,
-        .rx_pin = GPIO_PIN(PA,28),
-        .tx_pin = GPIO_PIN(PA,27),
+    {
+        .dev    = &SERCOM0->USART,
+        .rx_pin = GPIO_PIN(PA,5),
+        .tx_pin = GPIO_PIN(PA,4),
         .mux    = GPIO_MUX_D,
         .rx_pad = UART_PAD_RX_1,
         .tx_pad = UART_PAD_TX_0,
         .flags  = UART_FLAG_NONE,
         .gclk_src = GCLK_CLKCTRL_GEN_GCLK0
-    } 
-    {    // EXT2/3 
-        .dev    = &SERCOM4->USART,
-        .rx_pin = GPIO_PIN(PB,11),
-        .tx_pin = GPIO_PIN(PB,10),
+    },
+    {
+        .dev    = &SERCOM5->USART,
+        .rx_pin = GPIO_PIN(PA,23),
+        .tx_pin = GPIO_PIN(PA,22),
         .mux    = GPIO_MUX_D,
-        .rx_pad = UART_PAD_RX_3,
-        .tx_pad = UART_PAD_TX_2,
+        .rx_pad = UART_PAD_RX_1,
+        .tx_pad = UART_PAD_TX_0,
         .flags  = UART_FLAG_NONE,
         .gclk_src = GCLK_CLKCTRL_GEN_GCLK0
-    } */
+    }
 };
 
 /* interrupt function name mapping */
-#define UART_0_ISR          isr_sercom3
-#define UART_1_ISR          isr_sercom4
-#define UART_2_ISR          isr_sercom5
+#define UART_0_ISR          isr_sercom0
+#define UART_1_ISR          isr_sercom5
 
 #define UART_NUMOF          (sizeof(uart_config) / sizeof(uart_config[0]))
 /** @} */
 
 /**
- * @name PWM configuration
+ * @name    PWM configuration
  * @{
  */
 #define PWM_0_EN            1
 #define PWM_1_EN            1
-#define PWM_2_EN            1
-#define PWM_MAX_CHANNELS    2
+#define PWM_MAX_CHANNELS    3
 /* for compatibility with test application */
 #define PWM_0_CHANNELS      PWM_MAX_CHANNELS
 #define PWM_1_CHANNELS      PWM_MAX_CHANNELS
-#define PWM_2_CHANNELS      PWM_MAX_CHANNELS
 
 /* PWM device configuration */
-/*
 static const pwm_conf_t pwm_config[] = {
 #if PWM_0_EN
-    {TCC2, {
-        // GPIO pin, MUX value, TCC channel
-        { GPIO_PIN(PA, 12), GPIO_MUX_E, 0 },
-        { GPIO_PIN(PA, 13), GPIO_MUX_E, 1 },
+    {TCC1, {
+        /* GPIO pin, MUX value, TCC channel */
+        { GPIO_PIN(PA, 6), GPIO_MUX_E, 0 },
+        { GPIO_PIN(PA, 7), GPIO_MUX_E, 1 },
+        { GPIO_UNDEF, (gpio_mux_t)0, 2 }
     }},
 #endif
 #if PWM_1_EN
-    {TC4, {
-        // GPIO pin, MUX value, TCC channel 
-        { GPIO_PIN(PB, 12), GPIO_MUX_E, 0 },
-        { GPIO_PIN(PB, 13), GPIO_MUX_E, 1 },
-    }}
-#endif
-#if PWM_2_EN
-    {TC6, {
-        // GPIO pin, MUX value, TCC channel
-        { GPIO_PIN(PB, 02), GPIO_MUX_E, 0 },
-        { GPIO_PIN(PB, 03), GPIO_MUX_E, 1 },
+    {TCC0, {
+        /* GPIO pin, MUX value, TCC channel */
+        { GPIO_PIN(PA, 16), GPIO_MUX_F, 0 },
+        { GPIO_PIN(PA, 18), GPIO_MUX_F, 2 },
+        { GPIO_PIN(PA, 19), GPIO_MUX_F, 3 }
     }}
 #endif
 };
-*/
 
 /* number of devices that are actually defined */
-//#define PWM_NUMOF           (3U)
+#define PWM_NUMOF           (2U)
 /** @} */
 
 /**
- * @name SPI configuration
+ * @name    SPI configuration
  * @{
  */
-// From table 5-1 in https://www.mouser.com/ds/2/268/Atmel-42223-SAM-R21_Datasheet-1065540.pdf
 static const spi_conf_t spi_config[] = {
-    {   // EXT1 
-        // 
-        .dev      = &SERCOM2->SPI,
-        .miso_pin = GPIO_PIN(PA, 15),
-        .mosi_pin = GPIO_PIN(PA, 12),
-        .clk_pin  = GPIO_PIN(PA, 13),
-        .miso_mux = GPIO_MUX_C, 
-        .mosi_mux = GPIO_MUX_C, 
-        .clk_mux  = GPIO_MUX_C, 
-        .miso_pad = SPI_PAD_MISO_2, 
-        .mosi_pad = SPI_PAD_MOSI_0_SCK_1 
-    }
-    /*,
-    {   // EXT2 
-        .dev      = &SERCOM1->SPI,
-        .miso_pin = GPIO_PIN(PA, 16),
-        .mosi_pin = GPIO_PIN(PA, 18),
-        .clk_pin  = GPIO_PIN(PA, 19),
-        .miso_mux = GPIO_MUX_C,
-        .mosi_mux = GPIO_MUX_C,
-        .clk_mux  = GPIO_MUX_C,
+    {
+        .dev      = &SERCOM4->SPI,
+        .miso_pin = GPIO_PIN(PC, 19),
+        .mosi_pin = GPIO_PIN(PB, 30),
+        .clk_pin  = GPIO_PIN(PC, 18),
+        .miso_mux = GPIO_MUX_F,
+        .mosi_mux = GPIO_MUX_F,
+        .clk_mux  = GPIO_MUX_F,
         .miso_pad = SPI_PAD_MISO_0,
         .mosi_pad = SPI_PAD_MOSI_2_SCK_3
     },
-    {   // EXT3 
+    {
         .dev      = &SERCOM5->SPI,
-        .miso_pin = GPIO_PIN(PB, 16),
+        .miso_pin = GPIO_PIN(PB, 2),
         .mosi_pin = GPIO_PIN(PB, 22),
         .clk_pin  = GPIO_PIN(PB, 23),
-        .miso_mux = GPIO_MUX_C,
+        .miso_mux = GPIO_MUX_D,
         .mosi_mux = GPIO_MUX_D,
         .clk_mux  = GPIO_MUX_D,
         .miso_pad = SPI_PAD_MISO_0,
         .mosi_pad = SPI_PAD_MOSI_2_SCK_3
     }
-    */
 };
 
-/**
- * @name SPI confguration
- **/
-#define SPI_CS_DAC = GPIO_PIN(PA, 22)
-#define SPI_CS_MEM = GPIO_PIN(PA, 4)
-
-
-//#define SPI_NUMOF           (sizeof(spi_config) / sizeof(spi_config[0]))
+#define SPI_NUMOF           (sizeof(spi_config) / sizeof(spi_config[0]))
 /** @} */
 
 /**
- * @name I2C configuration
+ * @name    I2C configuration
  * @{
  */
- /*
 #define I2C_NUMOF          (1U)
 #define I2C_0_EN            1
 #define I2C_1_EN            0
@@ -261,20 +218,19 @@ static const spi_conf_t spi_config[] = {
 #define I2C_3_EN            0
 #define I2C_IRQ_PRIO        1
 
-#define I2C_0_DEV           SERCOM2->I2CM
-#define I2C_0_IRQ           SERCOM2_IRQn
-#define I2C_0_ISR           isr_sercom2
-// I2C 0 GCLK 
-#define I2C_0_GCLK_ID       SERCOM2_GCLK_ID_CORE
-#define I2C_0_GCLK_ID_SLOW  SERCOM2_GCLK_ID_SLOW
-// I2C 0 pin configuration 
-#define I2C_0_SDA           GPIO_PIN(PA, 8)
-#define I2C_0_SCL           GPIO_PIN(PA, 9)
+#define I2C_0_DEV           SERCOM3->I2CM
+#define I2C_0_IRQ           SERCOM3_IRQn
+#define I2C_0_ISR           isr_sercom3
+/* I2C 0 GCLK */
+#define I2C_0_GCLK_ID       SERCOM3_GCLK_ID_CORE
+#define I2C_0_GCLK_ID_SLOW  SERCOM3_GCLK_ID_SLOW
+/* I2C 0 pin configuration */
+#define I2C_0_SDA           GPIO_PIN(PA, 16)
+#define I2C_0_SCL           GPIO_PIN(PA, 17)
 #define I2C_0_MUX           GPIO_MUX_D
-*/
 
 /**
- * @name RTC configuration
+ * @name    RTC configuration
  * @{
  */
 #define RTC_NUMOF           (1U)
@@ -282,7 +238,7 @@ static const spi_conf_t spi_config[] = {
 /** @} */
 
 /**
- * @name RTT configuration
+ * @name    RTT configuration
  * @{
  */
 #define RTT_NUMOF           (1U)
@@ -315,20 +271,13 @@ static const spi_conf_t spi_config[] = {
 
 static const adc_conf_chan_t adc_channels[] = {
     /* port, pin, muxpos */
-    {GPIO_PIN(PA, 8), ADC_INPUTCTRL_MUXPOS_PIN16},      /* EXT1, pin 8 */
- //   {GPIO_PIN(PB, 1), ADC_INPUTCTRL_MUXPOS_PIN9},      /* EXT1, pin 4 */
- //   {GPIO_PIN(PA, 10), ADC_INPUTCTRL_MUXPOS_PIN18},    /* EXT2, pin 3 */
- //   {GPIO_PIN(PA, 11), ADC_INPUTCTRL_MUXPOS_PIN19},    /* EXT2, pin 4 */
- //   {GPIO_PIN(PA, 2), ADC_INPUTCTRL_MUXPOS_PIN0},      /* EXT3, pin 3 */
-//    {GPIO_PIN(PA, 3), ADC_INPUTCTRL_MUXPOS_PIN1}       /* EXT3, pin 4. This is
-                        disconnected by default. PA3 is connected to USB_ID.
-                        Move PA03 SELECT jumper to EXT3 to connect. */
+    {GPIO_PIN(PA, 6), ADC_INPUTCTRL_MUXPOS_PIN6},      /* EXT1, pin 3 */
+    {GPIO_PIN(PA, 7), ADC_INPUTCTRL_MUXPOS_PIN7},      /* EXT1, pin 4 */
 };
 
-#define ADC_0_CHANNELS                     (1U)
+#define ADC_0_CHANNELS                     (2U)
 #define ADC_NUMOF                          ADC_0_CHANNELS
 /** @} */
-
 #ifdef __cplusplus
 }
 #endif
