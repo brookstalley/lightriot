@@ -42,7 +42,15 @@ extern "C" {
 /** @} */
 
 /**
- * @name 
+ * @name    AT86RF233 configuration
+ *
+ * {spi bus, spi speed, cs pin, int pin, reset pin, sleep pin}
+ */
+#define AT86RF2XX_PARAM_CS         GPIO_PIN(PB, 31)
+#define AT86RF2XX_PARAM_INT        GPIO_PIN(PB, 0)
+#define AT86RF2XX_PARAM_SLEEP      GPIO_PIN(PA, 20)
+#define AT86RF2XX_PARAM_RESET      GPIO_PIN(PB, 15)
+
 
 /**
  * @name   LED pin definitions and handlers
