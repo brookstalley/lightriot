@@ -156,43 +156,27 @@ static const uart_conf_t uart_config[] = {
  * @{
  */
 #define PWM_0_EN            1
-#define PWM_1_EN            1
-#define PWM_2_EN            1
-#define PWM_MAX_CHANNELS    2
+
+#define PWM_MAX_CHANNELS    4
 /* for compatibility with test application */
 #define PWM_0_CHANNELS      PWM_MAX_CHANNELS
-#define PWM_1_CHANNELS      PWM_MAX_CHANNELS
-#define PWM_2_CHANNELS      PWM_MAX_CHANNELS
 
 /* PWM device configuration */
-/*
+
 static const pwm_conf_t pwm_config[] = {
-#if PWM_0_EN
-    {TCC2, {
+
+    {TCC0, {
         // GPIO pin, MUX value, TCC channel
-        { GPIO_PIN(PA, 12), GPIO_MUX_E, 0 },
-        { GPIO_PIN(PA, 13), GPIO_MUX_E, 1 },
+        { GPIO_PIN(PA, 16), GPIO_MUX_F, 0 },
+        { GPIO_PIN(PA, 18), GPIO_MUX_F, 1 },
+        { GPIO_PIN(PA, 17), GPIO_MUX_F, 2 },
+        { GPIO_PIN(PA, 19), GPIO_MUX_F, 3 },        
     }},
-#endif
-#if PWM_1_EN
-    {TC4, {
-        // GPIO pin, MUX value, TCC channel 
-        { GPIO_PIN(PB, 12), GPIO_MUX_E, 0 },
-        { GPIO_PIN(PB, 13), GPIO_MUX_E, 1 },
-    }}
-#endif
-#if PWM_2_EN
-    {TC6, {
-        // GPIO pin, MUX value, TCC channel
-        { GPIO_PIN(PB, 02), GPIO_MUX_E, 0 },
-        { GPIO_PIN(PB, 03), GPIO_MUX_E, 1 },
-    }}
-#endif
 };
-*/
+
 
 /* number of devices that are actually defined */
-//#define PWM_NUMOF           (3U)
+#define PWM_NUMOF           (1U)
 /** @} */
 
 /**
@@ -321,8 +305,8 @@ static const adc_conf_chan_t adc_channels[] = {
  //   {GPIO_PIN(PA, 11), ADC_INPUTCTRL_MUXPOS_PIN19},    /* EXT2, pin 4 */
  //   {GPIO_PIN(PA, 2), ADC_INPUTCTRL_MUXPOS_PIN0},      /* EXT3, pin 3 */
 //    {GPIO_PIN(PA, 3), ADC_INPUTCTRL_MUXPOS_PIN1}       /* EXT3, pin 4. This is
-                        disconnected by default. PA3 is connected to USB_ID.
-                        Move PA03 SELECT jumper to EXT3 to connect. */
+ //                       disconnected by default. PA3 is connected to USB_ID.
+ //                       Move PA03 SELECT jumper to EXT3 to connect. */
 };
 
 #define ADC_0_CHANNELS                     (1U)

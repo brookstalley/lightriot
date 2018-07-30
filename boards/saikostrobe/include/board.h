@@ -48,6 +48,8 @@ extern "C" {
  * @name   LED pin definitions and handlers
  * @{
  */
+
+/* These are really PWM pins... this stuff will stop working when the PWM code comes up */
 #define LED0_PIN            GPIO_PIN(PA, 18)
 #define LED1_PIN            GPIO_PIN(PA, 17)
 #define LED2_PIN            GPIO_PIN(PA, 19)
