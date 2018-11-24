@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/Users/brooks/source/RIOT/drivers/include",
+                "/Users/brooks/source/RIOT/cpu/cortexm_common/include",
+                "/Users/brooks/source/RIOT/core/include",
+                "/Users/brooks/source/RIOT/sys/include",
+                "/Users/brooks/source/RIOT/cpu/sam0_common/include/",
+                "/Users/brooks/source/RIOT/cpu/samd21/include/"
+            ],
+            "defines": [],
+            "macFrameworkPath": [
+                "/Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/System/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}
