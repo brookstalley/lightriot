@@ -120,7 +120,20 @@ static const uart_conf_t uart_config[] = {
         .tx_pad   = UART_PAD_TX_0,
         .flags    = UART_FLAG_NONE,
         .gclk_src = GCLK_CLKCTRL_GEN_GCLK0
-    } /* Don't think USB actually goes here
+    }, 
+    {
+        // EXT2 -- UART over SWD pins
+        .dev      = &SERCOM1->USART,
+        .rx_pin   = GPIO_PIN(PA,30),
+        .tx_pin   = GPIO_PIN(PA,31),    
+        .mux      = GPIO_MUX_D,
+        .rx_pad   = UART_PAD_RX_2,
+        .tx_pad   = UART_PAD_TX_3,
+        .flags    = UART_FLAG_NONE,
+        .gclk_src = GCLK_CLKCTRL_GEN_GCLK0       
+    }
+    
+    /* Don't think USB actually goes here
     {    // EXT2 -- mapping to USB
         .dev    = &SERCOM4->USART,
         .rx_pin = GPIO_PIN(PA,28),
@@ -165,15 +178,16 @@ static const uart_conf_t uart_config[] = {
 
 static const pwm_conf_t pwm_config[] = {
 
+#if PWM_0_EN
     {TCC0, {
-        // GPIO pin, MUX value, TCC channel
-        { GPIO_PIN(PA, 16), GPIO_MUX_F, 0 },
-        { GPIO_PIN(PA, 18), GPIO_MUX_F, 1 },
+        /* GPIO pin, MUX value, TCC channel */
+        { GPIO_PIN(PA, 16), GPIO_MUX_E, 0 },
+        { GPIO_PIN(PA, 18), GPIO_MUX_E, 1 },
         { GPIO_PIN(PA, 17), GPIO_MUX_F, 2 },
-        { GPIO_PIN(PA, 19), GPIO_MUX_F, 3 },        
+        //{ GPIO_PIN(PA, 19), GPIO_MUX_F, 3 }  
     }},
+#endif
 };
-
 
 /* number of devices that are actually defined */
 #define PWM_NUMOF           (1U)
