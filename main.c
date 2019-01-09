@@ -12,6 +12,7 @@
 
 #include "board.h"
 #include "periph/gpio.h"
+//#include "periph_cpu.h"
 #include "periph/cpuid.h"
 #include "led.h"
 
@@ -191,9 +192,9 @@ unsigned short crc16(const unsigned char* data_p, unsigned char length){
 
 
 static void get_board_id(void) {
-    //cpuid_get(cpuid);
-    //unsigned short boardid = crc16(cpuid, CPUID_LEN);
-    //printf("Board ID: %04x\n",boardid);
+    cpuid_get(cpuid);
+    unsigned short boardid = crc16(cpuid, CPUID_LEN);
+    printf("Board ID: %04x\n",boardid);
     printf("Board ID: (unknown)");
 }
 

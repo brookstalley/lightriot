@@ -1,6 +1,7 @@
 FEATURES_REQUIRED += periph_gpio
 FEATURES_REQUIRED += periph_gpio_irq
 FEATURES_REQUIRED += periph_uart
+FEATURES_REQUIRED += periph_cpuid
 
 ifneq (,$(filter saul_default,$(USEMODULE)))
   USEMODULE += saul_gpio
