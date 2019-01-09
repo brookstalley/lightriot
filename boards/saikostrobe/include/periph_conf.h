@@ -113,6 +113,18 @@ extern "C" {
 	static const uart_conf_t uart_config[] = {
 		{
 			// EXT1 -- UART over USB pins (since we have no USB stack)
+			// TX on PA24, which was designed to be USBDM
+			// RX on PA25, which was designed to be USBDP
+			// 
+			// Micro USB pinout:
+			// 1: VCC
+			// 2: D-
+			// 3: D+
+			// 4: NC / Mode detect
+			// 5: GND
+			//
+			// Cable should connect MicroUSB pin 2 to host UART RX, MicroUSB pin 3 to Host UART TX
+			//
 			.dev = &SERCOM5->USART,
 			.rx_pin = GPIO_PIN(PA,25),
 			.tx_pin = GPIO_PIN(PA,24),
