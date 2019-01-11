@@ -72,7 +72,7 @@ extern "C" {
 	 * @param[in] buffer     the data buffer to write
 	 * @param[in] size       the data buffer's size
 	 */
-	void tps92661_writer_writeone_make(tps92661_writer_t *writer, uint8_t id, uint8_t reg_addr, uint8_t data);
+	void tps92661_writer_write_make(tps92661_writer_t *writer, uint8_t id, uint8_t reg_addr, uint8_t *data, uint8_t command_type);
 
 	/**
 	 * @brief Build a READ packet
@@ -82,7 +82,7 @@ extern "C" {
 	 * @param[in] reg        the register to read
 	 * @param[in] size       the size to read
 	 */
-	void tps92661_writer_readone_make(tps92661_writer_t *writer, uint8_t id, uint16_t reg_addr);
+	void tps92661_writer_read_make(tps92661_writer_t *writer, uint8_t id, uint16_t reg_addr, uint8_t command_type);
 
 
 #ifdef __cplusplus

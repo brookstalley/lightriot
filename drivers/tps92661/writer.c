@@ -42,35 +42,54 @@ size_t tps92661_writer_get_size(const tps92661_writer_t *writer)
 }
 
 
-void tps92661_writer_writeone_make(tps92661_writer_t *writer, uint8_t id, uint8_t reg_addr, uint8_t data)
+void tps92661_writer_write_make(tps92661_writer_t *writer, uint8_t id, uint8_t reg_addr, uint8_t *data, uint8_t command_type)
 {
-	const size_t len = 5;
 	uint16_t crc;
+	uint8_t data_length = 0;
+	switch (command_type) {
+	case TPS92661_COMMAND__WRITE_1DEVICE_1BYTE:
+		data_length = 1;
+		break;
+	case TPS92661_COMMAND__WRITE_1DEVICE_2BYTE:
+		data_length = 2;
+		break;
+	case TPS92661_COMMAND__WRITE_1DEVICE_5BYTE:
+		data_length = 5;
+		break;
+	case TPS92661_COMMAND__WRITE_1DEVICE_10BYTE:
+		data_length = 10;
+		break;
+	case TPS92661_COMMAND__WRITE_1DEVICE_15BYTE:
+		data_length = 15;
+		break;
+	}
+	const uint8_t packet_length = data_length + 4;
 
-	if (len <= writer->limit) {
-		writer->size = len;
-		writer->buffer[0] = (0x80 | id);
+	if (packet_length <= writer->limit) {
+		writer->size = packet_length;
+		writer->buffer[0] = (TPS92661_FRAMETYPE__COMMAND | command_type | id);
 		writer->buffer[1] = reg_addr;
-		writer->buffer[2] = data;
-		crc = crc_16_ibm(writer->buffer, 3);
-		writer->buffer[3] = LOW(crc);
-		writer->buffer[4] = HIGH(crc);
+		memcpy(&writer->buffer[2], data, data_length);
+
+		crc = crc_16_ibm(writer->buffer, data_length + 2);
+		writer->buffer[writer->size - 2] = LOW(crc);
+		writer->buffer[writer->size - 1] = HIGH(crc);
 	}
 	else {
 		writer->size = 0;
-
 	}
 }
 
-void tps92661_writer_readone_make(tps92661_writer_t *writer, uint8_t id, uint16_t reg_addr)
+void tps92661_writer_read_make(tps92661_writer_t *writer, uint8_t id, uint16_t reg_addr, uint8_t command_type)
 {
 	const size_t len = 4;
 	uint16_t crc;
 
+
 	if (len <= writer->limit) {
 		writer->size = len;
 
-		writer->buffer[0] = (0xc0 | id);
+		writer->buffer[0] = (TPS92661_FRAMETYPE__COMMAND | command_type | id);
 		writer->buffer[1] = reg_addr;
 
 		crc = crc_16_ibm(writer->buffer, 2);

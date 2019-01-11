@@ -33,7 +33,7 @@ int tps92661_ping(uart_half_duplex_t *stream, tps92661_id_t id)
 
 	uart_half_duplex_set_tx(stream);
 	tps92661_writer_init(&pw, stream->buffer, stream->size);
-	tps92661_writer_readone_make(&pw, id, TPS92661_REG__SYSCFG);
+	tps92661_writer_read_make(&pw, id, TPS92661_REG__SYSCFG, TPS92661_COMMAND__READ_1BYTE);
 	uart_half_duplex_send(stream, pw.size);
 
 	uart_half_duplex_set_rx(stream);
