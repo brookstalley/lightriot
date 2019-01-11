@@ -1,0 +1,19 @@
+/*
+ * This file is subject to the terms and conditions of the GNU Lesser General
+ * Public License v2.1. See the file LICENSE in the top level directory for more
+ * details.
+ */
+
+ /**
+  * @ingroup     drivers_tps92661
+  *
+  * @{
+  *
+  * @file
+  * @brief       Default parameters for tps92661 LED matrix controller
+  *
+  * @author      Brooks Talley <brooks@tangentry.com>
+  */
+
+#define TPS92661_PARAM_UART		(1)
+#define TPS92661_PARAM_ID		(0)

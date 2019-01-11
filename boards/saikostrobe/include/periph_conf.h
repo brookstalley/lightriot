@@ -107,12 +107,13 @@ extern "C" {
 /** @} */
 
 /**
+ * https://www.mouser.com/ds/2/268/Atmel-42223-SAM-R21_Datasheet-1065540.pdf
  * @name UART configuration
  * @{
  */
 	static const uart_conf_t uart_config[] = {
 		{
-			// EXT1 -- UART over USB pins (since we have no USB stack)
+			// UART0 -- UART over USB pins (since we have no USB stack)
 			// TX on PA24, which was designed to be USBDM
 			// RX on PA25, which was designed to be USBDP
 			// 
@@ -134,7 +135,7 @@ extern "C" {
 			.flags = UART_FLAG_NONE,
 			.gclk_src = GCLK_CLKCTRL_GEN_GCLK0
 
-	}, {    // EXT2 -- mapping to UART that talks to TPS92661 
+	}, {    // UART1 -- mapping to UART that talks to TPS92661 
 		.dev = &SERCOM3->USART,
 			.rx_pin = GPIO_PIN(PA, 28),
 			.tx_pin = GPIO_PIN(PA, 27),
@@ -145,27 +146,7 @@ extern "C" {
 			.gclk_src = GCLK_CLKCTRL_GEN_GCLK0
 	}
 
-		/* Don't think USB actually goes here
-		{    // EXT2 -- mapping to USB
-			.dev    = &SERCOM4->USART,
-			.rx_pin = GPIO_PIN(PA,28),
-			.tx_pin = GPIO_PIN(PA,27),
-			.mux    = GPIO_MUX_D,
-			.rx_pad = UART_PAD_RX_1,
-			.tx_pad = UART_PAD_TX_0,
-			.flags  = UART_FLAG_NONE,
-			.gclk_src = GCLK_CLKCTRL_GEN_GCLK0
-		}
-		{    // EXT2/3
-			.dev    = &SERCOM4->USART,
-			.rx_pin = GPIO_PIN(PB,11),
-			.tx_pin = GPIO_PIN(PB,10),
-			.mux    = GPIO_MUX_D,
-			.rx_pad = UART_PAD_RX_3,
-			.tx_pad = UART_PAD_TX_2,
-			.flags  = UART_FLAG_NONE,
-			.gclk_src = GCLK_CLKCTRL_GEN_GCLK0
-		} */
+
 	};
 
 	/* interrupt function name mapping */
@@ -194,7 +175,7 @@ extern "C" {
 		{TCC0, {
 		/* GPIO pin, MUX value, TCC channel */
 		{ GPIO_PIN(PA, 18), GPIO_MUX_F, 2 },
-		{ GPIO_PIN(PA, 17), GPIO_MUX_F, 7 },
+		{ GPIO_PIN(PA, 17), GPIO_MUX_F, 1 },
 		{ GPIO_PIN(PA, 17), GPIO_MUX_F, 3 },
 	}},
 	#endif

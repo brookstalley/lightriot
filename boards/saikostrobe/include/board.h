@@ -87,17 +87,17 @@ extern "C" {
  * @{
  */
  // Updated for encoder switch
-#define BTN0_PORT           PORT->Group[PA]
-#define BTN0_PIN            GPIO_PIN(PA, 7)
-#define BTN0_MODE           GPIO_IN_PU
+#define ENC_SW_PORT           PORT->Group[PA]
+#define ENC_SW_PIN            GPIO_PIN(PA, 7)
+#define ENC_SW_MODE           GPIO_IN_PU
 
-#define ENCA_PORT           PORT->Group[PA]
-#define ENCA_PIN            GPIO_PIN(PA, 14)
-#define ENCA_MODE           GPIO_IN_PU // Not sure if this should be pull-up
+#define ENC_A_PORT           PORT->Group[PA]
+#define ENC_A_PIN            GPIO_PIN(PA, 14)
+#define ENC_A_MODE          GPIO_IN_PU // Not sure if this should be pull-up
 
-#define ENCB_PORT           PORT->Group[PA]
-#define ENCB_PIN            GPIO_PIN(PB, 23)
-#define ENCB_MODE           GPIO_IN_PU // Not sure if this should be pull-up
+#define ENC_B_PORT           PORT->Group[PB]
+#define ENC_B_PIN            GPIO_PIN(PB, 23)
+#define ENC_B_MODE           GPIO_IN_PU // Not sure if this should be pull-up
 
 
 /** @} */

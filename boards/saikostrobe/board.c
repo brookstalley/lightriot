@@ -32,7 +32,7 @@ void board_init(void)
     gpio_init(LED2_PIN, GPIO_OUT);    
 
     /* initialize the on-board button */
-    gpio_init(BTN0_PIN, BTN0_MODE);
+    gpio_init(ENC_SW_PIN, ENC_SW_MODE);
 
     /* initialize the CPU */
     cpu_init();
