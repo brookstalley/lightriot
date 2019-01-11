@@ -20,14 +20,17 @@
 #include "tps92661_reader.h"
 #include "tps92661_writer.h"
 #include "tps92661_protocol.h"
+#include "periph/gpio.h"
 
-void tps92661_init(tps92661_t *device, tps92661_params_t *params)
+int tps92661_init(tps92661_t *device, tps92661_params_t *params)
 {
 	device->params.stream = params->stream;
 	device->params.id = params->id;
 	device->params.enable_pin = params->enable_pin;
 	device->params.enable_mode = params->enable_mode;
 
+	gpio_clear(device->params.enable_pin);
+	return tps92661_ping(device);
 } 
 
 int tps92661_ping(tps92661_t *device)

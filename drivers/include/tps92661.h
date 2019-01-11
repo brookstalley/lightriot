@@ -77,7 +77,7 @@ extern "C" {
 	 * @param[in] stream   the stream
 	 * @param[in] id       the device address
 	 */
-	void tps92661_init(tps92661_t *device, tps92661_params_t *params);
+	int tps92661_init(tps92661_t *device, tps92661_params_t *params);
 
 
 #ifdef __cplusplus

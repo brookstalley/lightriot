@@ -322,15 +322,19 @@ int init_tps92661(uint8_t uart_id) {
 		.enable_mode = TPS92661_ENABLE_MODE,
 	}; 
 
-	tps92661_init(&matrix, &matrix_params);
+	int matrix_result = tps92661_init(&matrix, &matrix_params);
 
-	int ping_result = tps92661_ping(&matrix);
-	if (ping_result == TPS92661_TIMEOUT) {
+
+	if (matrix_result == TPS92661_TIMEOUT) {
 		puts("Error: timeout pinging TPS92661");
 		return -1;
 	}
-	printf("Successfully pinged TPS92661");
-	return 0;
+	if (matrix_result == TPS92661_OK) {
+		printf("Successfully pinged TPS92661");
+		return 0;
+	}
+	puts("Error: unknown response from TPS92662");
+	return -1;
 }
 
 int main(void)
