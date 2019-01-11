@@ -49,6 +49,8 @@ static unsigned long blink_interval = BLINK_INTERVAL_DEFAULT;
 #define MSG_STOP_TIMER (0x0101)
 #define MSG_CHANGE_INTERVAL (0x0102)
 
+tps92661_t matrix;
+
 uint8_t cpuid[CPUID_LEN];
 
 static uint8_t tps92661_buffer[128];
@@ -283,6 +285,7 @@ const shell_command_t shell_commands[] = {
 };
 
 int init_tps92661(uint8_t uart_id) {
+
 	uart_half_duplex_params_t tps92661_params = {
 		.uart = uart_id,
 		.baudrate = 1000,
@@ -311,6 +314,15 @@ int init_tps92661(uint8_t uart_id) {
 		return -1;
 	}
 	printf("Successfully initialized TPS92661 bus UART_DEV(%i)\n", uart_id);
+	
+	tps92661_init(&matrix, &tps92661_stream, 0);
+
+	int ping_result = tps92661_ping(&matrix);
+	if (ping_result == TPS92661_TIMEOUT) {
+		puts("Error: timeout pinging TPS92661");
+		return -1;
+	}
+	printf("Successfully pinged TPS92661");
 	return 0;
 }
 

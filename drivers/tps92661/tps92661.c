@@ -27,17 +27,17 @@ void tps92661_init(tps92661_t *device, uart_half_duplex_t *stream, tps92661_id_t
 	device->id = id;
 } 
 
-int tps92661_ping(uart_half_duplex_t *stream, tps92661_id_t id)
+int tps92661_ping(tps92661_t *device)
 {
 	tps92661_writer_t pw;
 
-	uart_half_duplex_set_tx(stream);
-	tps92661_writer_init(&pw, stream->buffer, stream->size);
-	tps92661_writer_read_make(&pw, id, TPS92661_REG__SYSCFG, TPS92661_COMMAND__READ_1BYTE);
-	uart_half_duplex_send(stream, pw.size);
+	uart_half_duplex_set_tx(device->stream);
+	tps92661_writer_init(&pw, device->stream->buffer, device->stream->size);
+	tps92661_writer_read_make(&pw, device->id, TPS92661_REG__SYSCFG, TPS92661_COMMAND__READ_1BYTE);
+	uart_half_duplex_send(device->stream, pw.size);
 
-	uart_half_duplex_set_rx(stream);
-	if (uart_half_duplex_recv(stream, 1) != 1) {
+	uart_half_duplex_set_rx(device->stream);
+	if (uart_half_duplex_recv(device->stream, 1) != 1) {
 		return TPS92661_TIMEOUT;
 	}
 

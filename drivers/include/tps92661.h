@@ -61,7 +61,7 @@ extern "C" {
 	 * @return             TPS92661_BUFFER_TOO_SMALL if buffer is too small for the message
 	 * @return             TPS92661_INVALID_MESSAGE if an invalid message was received
 	 */
-	int tps92661_ping(uart_half_duplex_t *stream, tps92661_id_t id);
+	int tps92661_ping(tps92661_t *device);
 
 	/**
 	 * @brief   Initialize a TPS92661 device
