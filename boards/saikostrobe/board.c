@@ -34,6 +34,9 @@ void board_init(void)
     /* initialize the on-board button */
     gpio_init(ENC_SW_PIN, ENC_SW_MODE);
 
+	/* initialize the matrix controller in disabled mode */
+	gpio_init(TPS92661_ENABLE_PIN, TPS92661_ENABLE_MODE);
+
     /* initialize the CPU */
     cpu_init();
 }

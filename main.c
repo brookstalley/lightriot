@@ -315,7 +315,14 @@ int init_tps92661(uint8_t uart_id) {
 	}
 	printf("Successfully initialized TPS92661 bus UART_DEV(%i)\n", uart_id);
 	
-	tps92661_init(&matrix, &tps92661_stream, 0);
+	tps92661_params_t matrix_params = {
+		.stream = &tps92661_stream,
+		.id = 0,
+		.enable_pin = TPS92661_ENABLE_PIN,
+		.enable_mode = TPS92661_ENABLE_MODE,
+	}; 
+
+	tps92661_init(&matrix, &matrix_params);
 
 	int ping_result = tps92661_ping(&matrix);
 	if (ping_result == TPS92661_TIMEOUT) {

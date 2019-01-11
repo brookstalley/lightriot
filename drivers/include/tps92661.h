@@ -30,14 +30,21 @@
 extern "C" {
 #endif
 
-	typedef uint8_t tps92661_id_t;    /**< device id type */
-
 	/**
 	 * @brief   Descriptor struct for a TPS92661 device
 	 */
 	typedef struct {
 		uart_half_duplex_t *stream; /**< the stream used */
-		tps92661_id_t id; /**< the device ID */
+		uint8_t id; /**< the device ID */
+		gpio_t enable_pin;
+		gpio_mode_t enable_mode;
+	} tps92661_params_t;
+
+	/**
+	 * @brief   Descriptor struct for a TPS92661 device
+	 */
+	typedef struct {
+		tps92661_params_t params;
 	} tps92661_t;
 
 	/**
@@ -70,7 +77,7 @@ extern "C" {
 	 * @param[in] stream   the stream
 	 * @param[in] id       the device address
 	 */
-	void tps92661_init(tps92661_t *device, uart_half_duplex_t *stream, tps92661_id_t id);
+	void tps92661_init(tps92661_t *device, tps92661_params_t *params);
 
 
 #ifdef __cplusplus

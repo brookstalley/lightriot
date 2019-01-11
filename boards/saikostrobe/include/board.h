@@ -87,18 +87,20 @@ extern "C" {
  * @{
  */
  // Updated for encoder switch
-#define ENC_SW_PORT           PORT->Group[PA]
-#define ENC_SW_PIN            GPIO_PIN(PA, 7)
-#define ENC_SW_MODE           GPIO_IN_PU
+#define ENC_SW_PORT				PORT->Group[PA]
+#define ENC_SW_PIN				GPIO_PIN(PA, 7)
+#define ENC_SW_MODE				GPIO_IN_PU
 
-#define ENC_A_PORT           PORT->Group[PA]
-#define ENC_A_PIN            GPIO_PIN(PA, 14)
-#define ENC_A_MODE          GPIO_IN_PU // Not sure if this should be pull-up
+#define ENC_A_PORT				PORT->Group[PA]
+#define ENC_A_PIN				GPIO_PIN(PA, 14)
+#define ENC_A_MODE				GPIO_IN_PU // Not sure if this should be pull-up
 
-#define ENC_B_PORT           PORT->Group[PB]
-#define ENC_B_PIN            GPIO_PIN(PB, 23)
-#define ENC_B_MODE           GPIO_IN_PU // Not sure if this should be pull-up
+#define ENC_B_PORT				PORT->Group[PB]
+#define ENC_B_PIN				GPIO_PIN(PB, 23)
+#define ENC_B_MODE				GPIO_IN_PU // Not sure if this should be pull-up
 
+#define TPS92661_ENABLE_PIN		GPIO_PIN(PA, 23)
+#define TPS92661_ENABLE_MODE	GPIO_OUT
 
 /** @} */
 
