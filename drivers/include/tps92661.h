@@ -45,6 +45,7 @@ extern "C" {
 	 */
 	typedef struct {
 		tps92661_params_t params;
+		unsigned int current_power[16];
 	} tps92661_t;
 
 	/**
@@ -56,6 +57,7 @@ extern "C" {
 		TPS92661_BUFFER_TOO_SMALL, /**< Buffer is too small for the message */
 		TPS92661_INVALID_MESSAGE,  /**< Invalid message received */
 	};
+
 
 	/**
 	 * @brief   Send a PING message to a device

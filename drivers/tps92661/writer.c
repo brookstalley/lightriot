@@ -85,7 +85,6 @@ void tps92661_writer_read_make(tps92661_writer_t *writer, uint8_t id, uint16_t r
 	const size_t len = 4;
 	uint16_t crc;
 
-
 	if (len <= writer->limit) {
 		writer->size = len;
 

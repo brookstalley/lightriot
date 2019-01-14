@@ -33,16 +33,14 @@ uint16_t crc_16_ibm(const uint8_t *buf, size_t len)
 	return crc;
 }
 
-uint8_t reverse_byte(uint8_t byte)
-{
-	// First, swap the nibbles
-	byte = (((byte & 0xF0) >> 4) | ((byte & 0x0F) << 4));
-	// Then, swap bit pairs
-	byte = (((byte & 0xCC) >> 2) | ((byte & 0x33) << 2));
-	// Finally, swap adjacent bits
-	byte = (((byte & 0xAA) >> 1) | ((byte & 0x55) << 1));
-	// We should now be reversed (bit 0 <--> bit 7, bit 1 <--> bit 6, etc.)
-	return byte;}
+static unsigned char lookup[16] = {
+0x0, 0x8, 0x4, 0xc, 0x2, 0xa, 0x6, 0xe,
+0x1, 0x9, 0x5, 0xd, 0x3, 0xb, 0x7, 0xf, };
+
+uint8_t reverse_byte(uint8_t n) {
+	// Reverse the top and bottom nibble then swap them.
+	return (lookup[n & 0b1111] << 4) | lookup[n >> 4];
+}
 
 bool crc_valid(uint8_t *rx_buf, size_t crc_start)
 {
@@ -62,4 +60,4 @@ bool crc_valid(uint8_t *rx_buf, size_t crc_start)
 	else {
 		return false;
 	}
-}
+}

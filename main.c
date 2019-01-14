@@ -21,7 +21,7 @@
 
 #include "drivers/include/tps92661.h"
 
-#define TPS92661_UART	UART_DEV(1)
+#define TPS92661_UART	1
 
 /* Removing while we get the simple stuff up and running
 #include "net/gnrc/pktdump.h"
@@ -287,7 +287,7 @@ const shell_command_t shell_commands[] = {
 	{ NULL, NULL, NULL }
 };
 
-int init_tps92661(uart_t uart) {
+int init_tps92661(uint8_t uart_id) {
 
 	uart_half_duplex_params_t tps92661_params = {
 		.uart = uart_id,

@@ -71,6 +71,10 @@
 #define TPS92661_REG__LED12OFFL				(0x2d)
 #define TPS92661_REG__LED9_12OFFH			(0x2e)
 
+#define TPS92661_REG__MAPLED1ONL			(0x40)
+#define TPS92661_REG__MAPLED5ONL			(0x4a)
+#define TPS92661_REG__MAPLED9ONL			(0x54)
+
 #define TPS92661_REG__ENONL					(0xb0)
 #define TPS92661_REG__ENONH					(0xb1)
 #define TPS92661_REG__ENOFFL				(0xb2)
