@@ -194,12 +194,12 @@ int tps92661_sendchannels(tps92661_t *device, uint8_t start_channel, uint8_t end
 	if ((start_channel <= 7) && (end_channel >= 4)) {
 		// We need to send channels 4-7
 		tps92661_recalc_channels(device, 4, &channel_data[0]);
-		tps92661_write(device, TPS92661_REG__MAPLED1ONL, &channel_data[0], 10);
+		tps92661_write(device, TPS92661_REG__MAPLED5ONL, &channel_data[0], 10);
 	}
 	if (end_channel >= 8) {
 		// We need to send channels 8-11
 		tps92661_recalc_channels(device, 8, &channel_data[0]);
-		tps92661_write(device, TPS92661_REG__MAPLED1ONL, &channel_data[0], 10);
+		tps92661_write(device, TPS92661_REG__MAPLED9ONL, &channel_data[0], 10);
 	}
 	unsigned int enable_bits = 0;
 	for (uint8_t i = 0; i < 12; i++) {
