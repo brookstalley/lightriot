@@ -21,83 +21,9 @@
 #include "tps92661_writer.h"
 #include "tps92661_protocol.h"
 #include "periph/gpio.h"
-#include <string.h>
 
 #define LOW(v) (v & 0xFF)
 #define HIGH(v) ((v >> 8) & 0xFF)
-
-int tps92661_write(tps92661_t *device, uint8_t start_address, uint8_t *data, size_t data_length) {
-	uint8_t message_type = 0;
-	switch (data_length) {
-	case 1:
-		message_type = TPS92661_COMMAND__WRITE_1DEVICE_1BYTE;
-		break;
-	case 2:
-		message_type = TPS92661_COMMAND__WRITE_1DEVICE_2BYTE;
-		break;
-	case 5:
-		message_type = TPS92661_COMMAND__WRITE_1DEVICE_5BYTE;
-		break;
-	case 10:
-		message_type = TPS92661_COMMAND__WRITE_1DEVICE_10BYTE;
-		break;
-	case 15:
-		message_type = TPS92661_COMMAND__WRITE_1DEVICE_15BYTE;
-		break;
-	default:
-		return -1;
-		// TODO: real error handling
-	}
-	// TODO: don't create a new writer with each call
-	tps92661_writer_t pw;
-	tps92661_writer_init(&pw, device->params.stream->buffer, device->params.stream->size);
-	uart_half_duplex_set_tx(device->params.stream);
-	tps92661_writer_write_make(&pw, device->params.id, start_address, data, message_type);
-	uart_half_duplex_send(device->params.stream, pw.size);
-	return 0;
-}
-
-int tps92661_read(tps92661_t *device, uint8_t start_address, uint8_t *data, size_t data_length) {
-	uint8_t message_type = 0;
-	switch (data_length) {
-	case 1:
-		message_type = TPS92661_COMMAND__READ_1BYTE;
-		break;
-	case 2:
-		message_type = TPS92661_COMMAND__READ_2BYTE;
-		break;
-	case 5:
-		message_type = TPS92661_COMMAND__READ_5BYTE;
-		break;
-	case 10:
-		message_type = TPS92661_COMMAND__READ_10BYTE;
-		break;
-	case 15:
-		message_type = TPS92661_COMMAND__READ_15BYTE;
-		break;
-	default:
-		return -1;
-		// TODO: real error handling
-	}
-	// TODO: don't create a new writer with each call
-	tps92661_writer_t pw;
-	tps92661_writer_init(&pw, device->params.stream->buffer, device->params.stream->size);
-	uart_half_duplex_set_tx(device->params.stream);
-
-	tps92661_writer_read_make(&pw, device->params.id, start_address, message_type);
-	uart_half_duplex_send(device->params.stream, pw.size);
-
-	uart_half_duplex_set_rx(device->params.stream);
-
-	// Response should be the expected data size plus responst type and CRC
-	if (uart_half_duplex_recv(device->params.stream, data_length) != data_length + 3) {
-		return TPS92661_TIMEOUT;
-	}
-	// TODO: Add CRC checking
-	uint8_t  *response = &device->params.stream->buffer[1];
-	memcpy(response, data, data_length);
-	return 0;
-}
 
 int tps92661_init(tps92661_t *device, tps92661_params_t *params)
 {
@@ -110,7 +36,7 @@ int tps92661_init(tps92661_t *device, tps92661_params_t *params)
 		device->current_power[i] = 0;
 	}
 
-	uint8_t pck_data = 0b0001111;
+	uint8_t pck_data = 0b0000011;
 	tps92661_write(device, TPS92661_REG__PCKDIV, &pck_data, 1);
 
 	uint8_t cfg_data = 0b0001111;
@@ -212,3 +138,6 @@ int tps92661_sendchannels(tps92661_t *device, uint8_t start_channel, uint8_t end
 
 	return 0;
 }
+
+// TODO: "send all channels" which can be accomplished with two 15 byte writes rather than 3 10 bytes.
+

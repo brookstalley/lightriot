@@ -23,6 +23,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "tps92661_protocol.h"
+#include "tps92661_writer.h"
+#include "tps92661.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -119,6 +121,8 @@ extern "C" {
 	{
 		return tps92661_reader_get_length(reader) - 3;
 	}
+
+	int tps92661_read(tps92661_t *device, uint8_t start_address, uint8_t *data, size_t data_length);
 #ifdef __cplusplus
 }
 #endif

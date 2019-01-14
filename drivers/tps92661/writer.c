@@ -100,3 +100,34 @@ void tps92661_writer_read_make(tps92661_writer_t *writer, uint8_t id, uint16_t r
 		writer->size = 0;
 	}
 }
+
+int tps92661_write(tps92661_t *device, uint8_t start_address, uint8_t *data, size_t data_length) {
+	uint8_t message_type = 0;
+	switch (data_length) {
+	case 1:
+		message_type = TPS92661_COMMAND__WRITE_1DEVICE_1BYTE;
+		break;
+	case 2:
+		message_type = TPS92661_COMMAND__WRITE_1DEVICE_2BYTE;
+		break;
+	case 5:
+		message_type = TPS92661_COMMAND__WRITE_1DEVICE_5BYTE;
+		break;
+	case 10:
+		message_type = TPS92661_COMMAND__WRITE_1DEVICE_10BYTE;
+		break;
+	case 15:
+		message_type = TPS92661_COMMAND__WRITE_1DEVICE_15BYTE;
+		break;
+	default:
+		return -1;
+		// TODO: real error handling
+	}
+	// TODO: don't create a new writer with each call
+	tps92661_writer_t pw;
+	tps92661_writer_init(&pw, device->params.stream->buffer, device->params.stream->size);
+	uart_half_duplex_set_tx(device->params.stream);
+	tps92661_writer_write_make(&pw, device->params.id, start_address, data, message_type);
+	uart_half_duplex_send(device->params.stream, pw.size);
+	return 0;
+}

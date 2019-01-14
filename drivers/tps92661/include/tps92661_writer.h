@@ -19,6 +19,7 @@
 #define TPS92661_WRITER_H
 
 #include "tps92661_protocol.h"
+#include "tps92661.h"
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -77,13 +78,23 @@ extern "C" {
 	/**
 	 * @brief Build a READ packet
 	 *
-	 * @param[out] writer    the packet writer
-	 * @param[in] id         the destination's id
-	 * @param[in] reg        the register to read
-	 * @param[in] size       the size to read
+	 * @param[out] writer			the packet writer
+	 * @param[in] id				the destination's id
+	 * @param[in] reg_addr			the register to read
+	 * @param[in] command_type		read command to execute (specifies number of bytes)
 	 */
 	void tps92661_writer_read_make(tps92661_writer_t *writer, uint8_t id, uint16_t reg_addr, uint8_t command_type);
 
+
+	/**
+	 * @brief Write [1 | 2| 5 | 10 | 15] bytes in one go
+	 *
+	 * @param[in] writer			the TPS92661 device
+	 * @param[in] start_address     first register to write
+	 * @param[in] data				data to write
+	 * @param[in] data_length		how many bytes to write
+	 */
+	int tps92661_write(tps92661_t *device, uint8_t start_address, uint8_t *data, size_t data_length);
 
 #ifdef __cplusplus
 }
