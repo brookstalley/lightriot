@@ -14,11 +14,14 @@
 #include "stdio_uart.h"
 
 #include "board.h"
+#include "periph/uart.h"
 #include "periph/gpio.h"
 #include "periph/cpuid.h"
 #include "led.h"
 
 #include "drivers/include/tps92661.h"
+
+#define TPS92661_UART	UART_DEV(1)
 
 /* Removing while we get the simple stuff up and running
 #include "net/gnrc/pktdump.h"
@@ -284,7 +287,7 @@ const shell_command_t shell_commands[] = {
 	{ NULL, NULL, NULL }
 };
 
-int init_tps92661(uint8_t uart_id) {
+int init_tps92661(uart_t uart) {
 
 	uart_half_duplex_params_t tps92661_params = {
 		.uart = uart_id,
@@ -339,7 +342,7 @@ int init_tps92661(uint8_t uart_id) {
 
 int main(void)
 {
-	init_tps92661(1);
+	init_tps92661(TPS92661_UART);
 
 	msg_init_queue(_main_msg_queue, MAIN_QUEUE_SIZE);
 
