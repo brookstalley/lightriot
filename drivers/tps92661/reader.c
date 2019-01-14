@@ -17,13 +17,13 @@
   */
 
 #include "tps92661_reader.h"
-#include "tps92662_crc.h"
+#include "tps92661_crc.h"
 
 
 
 static inline bool tps92661_reader_check_start(const tps92661_reader_t *reader) {
 	return
-		(reader->buffer[0] & 0b00000000) == TPS92661_FRAMETYPE__RESPONSE
+		(reader->buffer[0] & 0b00000000) == TPS92661_FRAMETYPE__RESPONSE;
 }
 
 static inline bool tps92661_reader_check_size(const tps92661_reader_t *reader) {

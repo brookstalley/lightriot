@@ -20,7 +20,9 @@
 #define TPS92661_READER_H
 
 #include <stdlib.h>
+#include <stdint.h>
 #include <stdbool.h>
+#include "tps92661_protocol.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -42,7 +44,7 @@ extern "C" {
 		 * @param[in] buffer     the buffer used to store data
 		 * @param[in] size       the size of the buffer
 	*/
-	static inline void tps92661_reader_init(dynamixel_reader_t *reader, const uint8_t *buffer, size_t size)
+	static inline void tps92661_reader_init(tps92661_reader_t *reader, const uint8_t *buffer, size_t size)
 	{
 		reader->buffer = buffer;
 		reader->size = size;
@@ -92,9 +94,6 @@ extern "C" {
 		return response_size;
 	}
 
-	static inline bool tps92661_reader_check_start(const tps92661_reader_t *reader);
-
-	static inline bool tps92661_reader_check_size(const tps92661_reader_t *reader);
 
 	/**
 	 * @brief Get the packet's payload (response)
@@ -103,7 +102,7 @@ extern "C" {
 	 *
 	 * @return the addess of the begining of the payload
 	 */
-	static inline const uint8_t *tps92661_reader_status_get_payload(const dynamixel_reader_t *reader)
+	static inline const uint8_t *tps92661_reader_status_get_payload(const tps92661_reader_t *reader)
 	{
 		return &reader->buffer[1];
 	}
