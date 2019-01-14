@@ -94,7 +94,8 @@ void tps92661_recalc_channels(tps92661_t *device, uint8_t start_channel, uint8_t
 		else {
 			start_time[i] = (start_channel << 6);
 			// Fast integer ceiling
-			end_time[i] = ((start_channel << 6) + device->current_power[i + start_channel] / 64 + (device->current_power[i + start_channel] % 64 != 0)) % 1024;
+			unsigned int duration = device->current_power[i + start_channel] / 64 + (device->current_power[i + start_channel] % 64 != 0);
+			end_time[i] = (start_time[i] + duration) % 1024;
 		}
 	}
 	channel_data[0] = LOW(start_time[0]);
