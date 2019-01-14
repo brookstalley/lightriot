@@ -84,17 +84,17 @@ void tps92661_recalc_channels(tps92661_t *device, uint8_t start_channel, uint8_t
 		// TODO: stagger values based on channel to smooth power usage
 		if (device->current_power[i + start_channel] == 0) {
 			// Special case: proper way to dim to 0 is to set PWM to 1 cycle and turn off enable: http://www.ti.com/lit/ds/symlink/tps92661-q1.pdf (page 18)
-			start_time[i] = 0;
-			end_time[i] = 1;
+			start_time[i] = (start_channel << 6);
+			end_time[i] = (start_channel << 6) + 1;
 		}
 		else if (device->current_power[i + start_channel] >= 65535) {
 			start_time[i] = 0;
 			end_time[i] = 1023;
 		}
 		else {
-			start_time[i] = 0;
+			start_time[i] = (start_channel << 6);
 			// Fast integer ceiling
-			end_time[i] = device->current_power[i + start_channel] / 64 + (device->current_power[i + start_channel] % 64 != 0);
+			end_time[i] = ((start_channel << 6) + device->current_power[i + start_channel] / 64 + (device->current_power[i + start_channel] % 64 != 0)) % 1024;
 		}
 	}
 	channel_data[0] = LOW(start_time[0]);
