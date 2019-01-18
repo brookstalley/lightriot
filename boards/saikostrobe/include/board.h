@@ -29,6 +29,7 @@
 #include "periph_conf.h"
 #include "periph_cpu.h"
 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -53,6 +54,20 @@ extern "C" {
 
 
 /** @} */
+
+/**
+ * @name    MOSFET RGB LED 
+ *
+ * {spi bus, spi speed, cs pin, int pin, reset pin, sleep pin}
+ */
+	typedef struct {
+		uint32_t pwm_freq;
+		uint16_t pwm_res;
+		uint8_t red;
+		uint8_t green;
+		uint8_t blue;
+	} pwmrgb_t;
+
 
 /**
  * @name SW0 (Button) pin definitions
@@ -80,6 +95,10 @@ extern "C" {
  * @brief Initialize board specific hardware, including clock, LEDs and std-IO
  */
 void board_init(void);
+
+void rgbled_init(uint32_t freq, uint16_t res);
+
+void rgbled_setcolor(uint8_t red, uint8_t green, uint8_t blue);
 
 #ifdef __cplusplus
 }

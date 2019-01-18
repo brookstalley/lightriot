@@ -23,10 +23,32 @@
 
 #include "board.h"
 #include "periph/gpio.h"
+#include "periph/pwm.h"
+
+static pwmrgb_t rgbled;
+
+void rgbled_init(uint32_t freq, uint16_t res) {
+	rgbled.red = 0;
+	rgbled.green = 0;
+	rgbled.blue = 0;
+
+	rgbled.pwm_freq = pwm_init(PWM_DEV(0), PWM_LEFT, freq, res);
+	rgbled.pwm_res = res;
+}
+
+void rgbled_setcolor(uint8_t red, uint8_t green, uint8_t blue) {
+	rgbled.red = red;
+	rgbled.green = green;
+	rgbled.blue = blue;
+	pwm_set(0, 0, rgbled.red);
+	pwm_set(0, 1, rgbled.green);
+	pwm_set(0, 2, rgbled.blue);
+
+}
 
 void board_init(void)
 {
- 
+	rgbled_init(10000, 256);
 
     /* initialize the on-board button */
     gpio_init(ENC_SW_PIN, ENC_SW_MODE);

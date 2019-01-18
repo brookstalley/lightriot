@@ -18,7 +18,6 @@
 #include "periph/uart.h"
 #include "periph/gpio.h"
 #include "periph/cpuid.h"
-#include "periph/pwm.h"
 
 #include "drivers/include/tps92661.h"
 
@@ -55,15 +54,6 @@ static unsigned long blink_interval = BLINK_INTERVAL_DEFAULT;
 
 tps92661_t matrix;
 
-typedef struct {
-	uint8_t pwm_dev;
-	uint32_t pwm_freq;
-	uint8_t red;
-	uint8_t green;
-	uint8_t blue;
-} pwmrgb_t;
-
-static pwmrgb_t rgbled;
 static bool blink_on = false;
 
 uint8_t cpuid[CPUID_LEN];
@@ -79,33 +69,13 @@ static int hello_world(int argc, char **argv) {
 	return 0;
 }
 
-
-void init_rgbled(uint8_t pwmdev) {
-	rgbled.pwm_dev= pwmdev;
-	rgbled.red = 0;
-	rgbled.green = 0;
-	rgbled.blue = 0;
-
-	rgbled.pwm_freq = pwm_init(PWM_DEV(pwmdev), PWM_LEFT, 10000, 256);
-}
-
-void rgb_setcolor(uint8_t red, uint8_t green, uint8_t blue) {
-	rgbled.red = red;
-	rgbled.green = green;
-	rgbled.blue = blue;
-	pwm_set(rgbled.pwm_dev, 0, rgbled.red);
-	pwm_set(rgbled.pwm_dev, 1, rgbled.green);
-	pwm_set(rgbled.pwm_dev, 2, rgbled.blue);
-
-}
-
 static void toggle_led(void) {
 	blink_on = !blink_on;
 	if (blink_on) {
-		rgb_setcolor(64, 64, 64);
+		rgbled_setcolor(64, 64, 64);
 	}
 	else {
-		rgb_setcolor(0, 0, 0);
+		rgbled_setcolor(0, 0, 0);
 	}
 }
 
@@ -381,7 +351,6 @@ int init_tps92661(uint8_t uart_id) {
 
 int main(void)
 {
-	init_rgbled(PWM_DEV(0));
 	init_tps92661(TPS92661_UART);
 
 	msg_init_queue(_main_msg_queue, MAIN_QUEUE_SIZE);
