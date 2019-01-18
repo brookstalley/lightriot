@@ -8,16 +8,13 @@
  */
 
 /**
- * @ingroup     boards_samd21-xpro
+ * @ingroup     boards_saikostrobe
  * @{
  *
  * @file
- * @brief       Board specific implementations for the Atmel SAM D21 Xplained
- *              Pro board
+ * @brief       Board specific implementations for the saikostrobe board
  *
- * @author      Travis Griggs <travisgriggs@gmail.com>
- * @author      Dan Evans <photonthunder@gmail.com>
- * @author      Sebastian Meiling <s@mlng.net>
+ * @author      Brooks Talley <brooks@tangentry.com>
  * @}
  */
 
@@ -43,7 +40,6 @@ void rgbled_setcolor(uint8_t red, uint8_t green, uint8_t blue) {
 	pwm_set(0, 0, rgbled.red);
 	pwm_set(0, 1, rgbled.green);
 	pwm_set(0, 2, rgbled.blue);
-
 }
 
 void board_init(void)
