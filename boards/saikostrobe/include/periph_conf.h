@@ -176,7 +176,7 @@ extern "C" {
 		/* GPIO pin, MUX value, TCC channel */
 		{ GPIO_PIN(PA, 18), GPIO_MUX_F, 2 },
 		{ GPIO_PIN(PA, 17), GPIO_MUX_F, 1 },
-		{ GPIO_PIN(PA, 17), GPIO_MUX_F, 3 },
+		{ GPIO_PIN(PA, 19), GPIO_MUX_F, 3 },
 	}},
 	#endif
 	};
