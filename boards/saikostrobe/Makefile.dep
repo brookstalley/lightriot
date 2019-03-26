@@ -6,3 +6,9 @@ FEATURES_REQUIRED += periph_cpuid
 ifneq (,$(filter saul_default,$(USEMODULE)))
   USEMODULE += saul_gpio
 endif
+
+ifneq (,$(filter usbdev,$(USEMODULE)))
+  USEMODULE += sam_usb
+endif
+
+include $(RIOTCPU)/sam0_common/Makefile.dep

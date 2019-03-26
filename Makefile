@@ -2,7 +2,7 @@
 APPLICATION = lightriot
 
 # If no BOARD is found in the environment, use this default:
-BOARD ?= native
+BOARD ?= saikostrobe
 
 # This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= ../RIOT
@@ -30,6 +30,10 @@ DEVELHELP ?= 1
 QUIET ?= 1
 
 # Modules to include:
+USEMODULE += usbus
+USEMODULE += auto_init_usbus
+USEMODULE += stdio_cdc_acm
+
 USEMODULE += shell
 USEMODULE += shell_commands
 USEMODULE += ps

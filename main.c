@@ -277,6 +277,7 @@ int main(void)
     gpio_init_int(BTN0_PIN, GPIO_IN_PU, GPIO_FALLING, toggle_timer, NULL);
 #endif
 
+    puts ("Starting shell...\n");
     char line_buf[SHELL_DEFAULT_BUFSIZE];
     shell_run(shell_commands, line_buf, SHELL_DEFAULT_BUFSIZE);
 

@@ -22,6 +22,10 @@
 #ifndef PERIPH_CONF_H
 #define PERIPH_CONF_H
 
+
+#define USB_CONFIG_VID 0x1209
+#define USB_CONFIG_PID 0x2004
+
 #include <stdint.h>
 
 #include "cpu.h"
@@ -110,32 +114,9 @@ extern "C" {
  * @name UART configuration
  * @{
  */
-	static const uart_conf_t uart_config[] = {
-		{
-			// EXT1 -- UART over USB pins (since we have no USB stack)
-			// TX on PA24, which was designed to be USBDM
-			// RX on PA25, which was designed to be USBDP
-			// 
-			// Micro USB pinout:
-			// 1: VCC
-			// 2: D-
-			// 3: D+
-			// 4: NC / Mode detect
-			// 5: GND
-			//
-			// Cable should connect MicroUSB pin 2 to host UART RX, MicroUSB pin 3 to Host UART TX
-			//
-			.dev = &SERCOM5->USART,
-			.rx_pin = GPIO_PIN(PA,25),
-			.tx_pin = GPIO_PIN(PA,24),
-			.mux = GPIO_MUX_D,
-			.rx_pad = UART_PAD_RX_3,
-			.tx_pad = UART_PAD_TX_2,
-			.flags = UART_FLAG_NONE,
-			.gclk_src = GCLK_CLKCTRL_GEN_GCLK0
-
-	}, {    // EXT2 -- mapping to UART that talks to TPS92661 
-		.dev = &SERCOM3->USART,
+static const uart_conf_t uart_config[] =  {
+	{    // EXT2 -- mapping to UART that talks to TPS92661 
+			.dev = &SERCOM3->USART,
 			.rx_pin = GPIO_PIN(PA, 28),
 			.tx_pin = GPIO_PIN(PA, 27),
 			.mux = GPIO_MUX_F,
@@ -144,6 +125,7 @@ extern "C" {
 			.flags = UART_FLAG_NONE,
 			.gclk_src = GCLK_CLKCTRL_GEN_GCLK0
 	}
+};
 
 		/* Don't think USB actually goes here
 		{    // EXT2 -- mapping to USB
@@ -166,7 +148,7 @@ extern "C" {
 			.flags  = UART_FLAG_NONE,
 			.gclk_src = GCLK_CLKCTRL_GEN_GCLK0
 		} */
-	};
+
 
 	/* interrupt function name mapping */
 #define UART_0_ISR          isr_sercom5
@@ -337,6 +319,21 @@ extern "C" {
 #define ADC_0_CHANNELS                     (1U)
 #define ADC_NUMOF                          ADC_0_CHANNELS
 	/** @} */
+
+/**
+ * @name USB peripheral configuration
+ * @{
+ */
+static const sam0_common_usb_config_t sam_usbdev_config[] = {
+    {
+        .dm     = GPIO_PIN(PA, 24),
+        .dm_mux = GPIO_MUX_G,
+        .dp     = GPIO_PIN(PA, 25),
+        .dp_mux = GPIO_MUX_G,
+        .device = &USB->DEVICE,
+    }
+};
+/** @} */
 
 #ifdef __cplusplus
 }
