@@ -8,31 +8,49 @@
  */
 
 /**
- * @ingroup     boards_samd21-xpro
+ * @ingroup     boards_saikostrobe
  * @{
  *
  * @file
- * @brief       Board specific implementations for the Atmel SAM D21 Xplained
- *              Pro board
+ * @brief       Board specific implementations for the saikostrobe board
  *
- * @author      Travis Griggs <travisgriggs@gmail.com>
- * @author      Dan Evans <photonthunder@gmail.com>
- * @author      Sebastian Meiling <s@mlng.net>
+ * @author      Brooks Talley <brooks@tangentry.com>
  * @}
  */
 
 #include "board.h"
 #include "periph/gpio.h"
+#include "periph/pwm.h"
+
+static pwmrgb_t rgbled;
+
+void rgbled_init(uint32_t freq, uint16_t res) {
+	rgbled.red = 0;
+	rgbled.green = 0;
+	rgbled.blue = 0;
+
+	rgbled.pwm_freq = pwm_init(PWM_DEV(0), PWM_LEFT, freq, res);
+	rgbled.pwm_res = res;
+}
+
+void rgbled_setcolor(uint8_t red, uint8_t green, uint8_t blue) {
+	rgbled.red = red;
+	rgbled.green = green;
+	rgbled.blue = blue;
+	pwm_set(0, 0, rgbled.red);
+	pwm_set(0, 1, rgbled.green);
+	pwm_set(0, 2, rgbled.blue);
+}
 
 void board_init(void)
 {
-    /* initialize the on-board LEDs */
-    gpio_init(LED0_PIN, GPIO_OUT);
-    gpio_init(LED1_PIN, GPIO_OUT);
-    gpio_init(LED2_PIN, GPIO_OUT);    
+	rgbled_init(10000, 256);
 
     /* initialize the on-board button */
-    gpio_init(BTN0_PIN, BTN0_MODE);
+    gpio_init(ENC_SW_PIN, ENC_SW_MODE);
+
+	/* initialize the matrix controller in disabled mode */
+	gpio_init(TPS92661_ENABLE_PIN, TPS92661_ENABLE_MODE);
 
     /* initialize the CPU */
     cpu_init();

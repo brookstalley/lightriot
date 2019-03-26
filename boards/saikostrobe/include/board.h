@@ -32,6 +32,7 @@
 #include "periph_conf.h"
 #include "periph_cpu.h"
 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -55,53 +56,41 @@ extern "C" {
 #define AT86RF2XX_PARAM_RESET      GPIO_PIN(PB, 15)
 
 
-/**
- * @name   LED pin definitions and handlers
- * @{
- */
-
-/* These are really PWM pins... this stuff will stop working when the PWM code comes up */
-#define LED0_PIN            GPIO_PIN(PA, 18)
-#define LED1_PIN            GPIO_PIN(PA, 17)
-#define LED2_PIN            GPIO_PIN(PA, 19)
-
-#define LED_PORT            PORT->Group[PA]
-#define LED0_MASK           (1 << 18)
-#define LED1_MASK           (1 << 17)
-#define LED2_MASK           (1 << 19)
-
-#define LED0_ON             (LED_PORT.OUTCLR.reg = LED0_MASK)
-#define LED0_OFF            (LED_PORT.OUTSET.reg = LED0_MASK)
-#define LED0_TOGGLE         (LED_PORT.OUTTGL.reg = LED0_MASK)
-
-#define LED1_ON             (LED_PORT.OUTCLR.reg = LED1_MASK)
-#define LED1_OFF            (LED_PORT.OUTSET.reg = LED1_MASK)
-#define LED1_TOGGLE         (LED_PORT.OUTTGL.reg = LED1_MASK)
-
-#define LED2_ON             (LED_PORT.OUTCLR.reg = LED2_MASK)
-#define LED2_OFF            (LED_PORT.OUTSET.reg = LED2_MASK)
-#define LED2_TOGGLE         (LED_PORT.OUTTGL.reg = LED2_MASK)
-
-
 /** @} */
+
+/**
+ * @name    MOSFET RGB LED 
+ *
+ * {spi bus, spi speed, cs pin, int pin, reset pin, sleep pin}
+ */
+	typedef struct {
+		uint32_t pwm_freq;
+		uint16_t pwm_res;
+		uint8_t red;
+		uint8_t green;
+		uint8_t blue;
+	} pwmrgb_t;
+
 
 /**
  * @name SW0 (Button) pin definitions
  * @{
  */
  // Updated for encoder switch
-#define BTN0_PORT           PORT->Group[PA]
-#define BTN0_PIN            GPIO_PIN(PA, 7)
-#define BTN0_MODE           GPIO_IN_PU
+#define ENC_SW_PORT				PORT->Group[PA]
+#define ENC_SW_PIN				GPIO_PIN(PA, 7)
+#define ENC_SW_MODE				GPIO_IN_PU
 
-#define ENCA_PORT           PORT->Group[PA]
-#define ENCA_PIN            GPIO_PIN(PA, 14)
-#define ENCA_MODE           GPIO_IN_PU // Not sure if this should be pull-up
+#define ENC_A_PORT				PORT->Group[PA]
+#define ENC_A_PIN				GPIO_PIN(PA, 14)
+#define ENC_A_MODE				GPIO_IN_PU // Not sure if this should be pull-up
 
-#define ENCB_PORT           PORT->Group[PA]
-#define ENCB_PIN            GPIO_PIN(PB, 23)
-#define ENCB_MODE           GPIO_IN_PU // Not sure if this should be pull-up
+#define ENC_B_PORT				PORT->Group[PB]
+#define ENC_B_PIN				GPIO_PIN(PB, 23)
+#define ENC_B_MODE				GPIO_IN_PU // Not sure if this should be pull-up
 
+#define TPS92661_ENABLE_PIN		GPIO_PIN(PA, 23)
+#define TPS92661_ENABLE_MODE	GPIO_OUT
 
 /** @} */
 
@@ -109,6 +98,10 @@ extern "C" {
  * @brief Initialize board specific hardware, including clock, LEDs and std-IO
  */
 void board_init(void);
+
+void rgbled_init(uint32_t freq, uint16_t res);
+
+void rgbled_setcolor(uint8_t red, uint8_t green, uint8_t blue);
 
 #ifdef __cplusplus
 }

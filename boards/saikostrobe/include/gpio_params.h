@@ -32,28 +32,24 @@ extern "C" {
 /**
  * @brief    GPIO pin configuration
  */
+
 static const  saul_gpio_params_t saul_gpio_params[] =
 {
     {
-        .name = "LED(red)",
-        .pin = LED0_PIN,
-        .mode = GPIO_OUT
+        .name = "Encoder SW",
+        .pin  = ENC_SW_PIN,
+        .mode = ENC_SW_MODE
     },
-    {
-        .name = "LED(green)",
-        .pin = LED1_PIN,
-        .mode = GPIO_OUT
-    },
-    {
-        .name = "LED(blue)",
-        .pin = LED2_PIN,
-        .mode = GPIO_OUT
-    },
-    {
-        .name = "Button(SW0)",
-        .pin  = BTN0_PIN,
-        .mode = BTN0_MODE
-    },
+		{
+		.name = "Encoder A",
+		.pin = ENC_A_PIN,
+		.mode = ENC_SW_MODE
+	},
+		{
+		.name = "Encoder B",
+		.pin = ENC_B_PIN,
+		.mode = ENC_SW_MODE
+	},
 };
 
 #ifdef __cplusplus

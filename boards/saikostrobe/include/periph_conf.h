@@ -111,6 +111,7 @@ extern "C" {
 /** @} */
 
 /**
+ * https://www.mouser.com/ds/2/268/Atmel-42223-SAM-R21_Datasheet-1065540.pdf
  * @name UART configuration
  * @{
  */
@@ -176,8 +177,8 @@ static const uart_conf_t uart_config[] =  {
 		{TCC0, {
 		/* GPIO pin, MUX value, TCC channel */
 		{ GPIO_PIN(PA, 18), GPIO_MUX_F, 2 },
-		{ GPIO_PIN(PA, 17), GPIO_MUX_F, 7 },
-		{ GPIO_PIN(PA, 17), GPIO_MUX_F, 3 },
+		{ GPIO_PIN(PA, 17), GPIO_MUX_F, 1 },
+		{ GPIO_PIN(PA, 19), GPIO_MUX_F, 3 },
 	}},
 	#endif
 	};
