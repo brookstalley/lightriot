@@ -23,8 +23,8 @@
 #define TPS92661_H
 
 #include <stdlib.h>
-#include "tps92661_protocol.h"
-#include "uart_half_duplex.h"
+#include "../tps92661/include/tps92661_protocol.h"
+#include "../uart_half_duplex/include/uart_half_duplex.h"
 
 #ifdef __cplusplus
 extern "C" {
