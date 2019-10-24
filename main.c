@@ -15,10 +15,9 @@
 #include "stdio_uart.h"
 
 #include "board.h"
-#include "periph/uart.h"
-#include "periph/gpio.h"
+
 #include "periph/cpuid.h"
-#include "periph/pwm.h"
+
 
 #include "drivers/include/tps92661.h"
 
