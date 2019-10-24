@@ -34,13 +34,14 @@ USEMODULE += usbus
 USEMODULE += auto_init_usbus
 #USEMODULE += stdio_cdc_acm
 
-#USEMODULE += shell
-#USEMODULE += shell_commands
-#USEMODULE += ps
-#USEMODULE += xtimer
+USEMODULE += shell
+USEMODULE += shell_commands
+USEMODULE += ps
+USEMODULE += xtimer
 # include and auto-initialize all available sensors
-#USEMODULE += saul_default
+USEMODULE += saul_default
 USEMODULE += tps92661
+USEMODULE += uart_half_duplex
 
 DEFAULT_VID = 1209
 DEFAULT_PID = 0001
@@ -76,6 +77,8 @@ ifneq (,$(filter $(BOARD),$(BOARD_PROVIDES_NETIF)))
   CFLAGS += -DGNRC_PKTBUF_SIZE=512
 endif
 
+FEATURES_REQUIRED += periph_pwm
+FEATURES_REQUIRED += periph_cpuid
 FEATURES_OPTIONAL += periph_rtc
 
 ifneq (,$(filter msb-430,$(BOARD)))

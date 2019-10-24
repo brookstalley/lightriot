@@ -32,7 +32,6 @@
 #include "periph_conf.h"
 #include "periph_cpu.h"
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
