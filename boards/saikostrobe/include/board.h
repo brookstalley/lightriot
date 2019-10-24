@@ -25,8 +25,8 @@
 #ifndef BOARD_H
 #define BOARD_H
 
-#define USB_CONFIG_VID 0x1209
-#define USB_CONFIG_PID 0x2004
+//#define USB_CONFIG_VID 0x1209
+//#define USB_CONFIG_PID 0x2004
 
 #include "cpu.h"
 #include "periph_conf.h"

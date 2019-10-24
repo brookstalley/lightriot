@@ -22,9 +22,8 @@
 #ifndef PERIPH_CONF_H
 #define PERIPH_CONF_H
 
-
-#define USB_CONFIG_VID 0x1209
-#define USB_CONFIG_PID 0x2004
+//#define USB_CONFIG_VID 0x1209
+//#define USB_CONFIG_PID 0x2004
 
 #include <stdint.h>
 

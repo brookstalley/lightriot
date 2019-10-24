@@ -16,8 +16,8 @@
   * @}
   */
 
-#include "tps92661_reader.h"
-#include "tps92661_crc.h"
+#include "include/tps92661_reader.h"
+#include "include/tps92661_crc.h"
 #include "tps92661.h"
 #include <string.h>
 

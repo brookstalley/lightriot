@@ -16,8 +16,8 @@
   * @}
   */
 
-#include "tps92661_writer.h"
-#include "tps92661_crc.h"
+#include "include/tps92661_writer.h"
+#include "include/tps92661_crc.h"
 
 #include <string.h>
 

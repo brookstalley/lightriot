@@ -16,7 +16,7 @@
   * @}
   */
 
-#include "tps92661_crc.h"
+#include "include/tps92661_crc.h"
 #define LOW(v) (v & 0xFF)
 #define HIGH(v) ((v >> 8) & 0xFF)
 

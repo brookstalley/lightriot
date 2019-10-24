@@ -32,15 +32,22 @@ QUIET ?= 1
 # Modules to include:
 USEMODULE += usbus
 USEMODULE += auto_init_usbus
-USEMODULE += stdio_cdc_acm
+#USEMODULE += stdio_cdc_acm
 
-USEMODULE += shell
-USEMODULE += shell_commands
-USEMODULE += ps
-USEMODULE += xtimer
+#USEMODULE += shell
+#USEMODULE += shell_commands
+#USEMODULE += ps
+#USEMODULE += xtimer
 # include and auto-initialize all available sensors
-USEMODULE += saul_default
+#USEMODULE += saul_default
 USEMODULE += tps92661
+
+DEFAULT_VID = 1209
+DEFAULT_PID = 0001
+USB_VID ?= $(DEFAULT_VID)
+USB_PID ?= $(DEFAULT_PID)
+
+CFLAGS += -DUSB_CONFIG_VID=0x$(USB_VID) -DUSB_CONFIG_PID=0x$(USB_PID)
 
 BOARD_PROVIDES_NETIF := acd52832 airfy-beacon b-l072z-lrwan1 cc2538dk fox iotlab-m3 iotlab-a8-m3 mulle \
         microbit native nrf51dongle nrf52dk nrf6310 openmote-cc2538 pba-d-01-kw2x \

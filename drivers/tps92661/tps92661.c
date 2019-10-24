@@ -17,9 +17,9 @@
   */
 
 #include "tps92661.h"
-#include "tps92661_reader.h"
-#include "tps92661_writer.h"
-#include "tps92661_protocol.h"
+#include "include/tps92661_reader.h"
+#include "include/tps92661_writer.h"
+#include "include/tps92661_protocol.h"
 #include "periph/gpio.h"
 
 #define LOW(v) (v & 0xFF)
